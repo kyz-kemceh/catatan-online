@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CatatanKu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f5f8;color:#20232a;font-family:Arial,sans-serif}
+header{padding:22px;background:#fff;border-bottom:1px solid #eee}
+h1{margin:0;font-size:24px}
+small{color:#777}
+main{max-width:650px;margin:auto;padding:18px}
+.card{background:white;border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 3px 15px #00000008}
+input,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:16px;margin:7px 0}
+textarea{min-height:130px;resize:vertical}
+button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:white;font-size:15px;margin:4px;cursor:pointer}
+.secondary{background:#e9ebf2;color:#222}
+.danger{background:#ffe7e7;color:#a22}
+.note{white-space:pre-wrap;overflow-wrap:anywhere}
+.note h3{margin-top:0}
+#app{display:none}
+#status{padding:12px;color:#555}
+</style>
+</head>
+<body>
+<header>
+<h1>📝 CatatanKu</h1>
+<small>Catatan tersimpan online</small>
+</header>
+<main>
+<div id="status">Memuat...</div>
+
+<div id="login" class="card" style="display:none">
+<h3>Login akun</h3>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Masuk</button>
+</div>
+
+<div id="app">
+<div class="card">
+<input id="title" placeholder="Judul catatan">
+<textarea id="content" placeholder="Tulis catatan di sini..."></textarea>
+<button onclick="saveNote()">Simpan catatan</button>
+<button class="secondary" onclick="cancelEdit()">Batal edit</button>
+</div>
+<div id="notes"></div>
+<button class="secondary" onclick="logout()">Keluar akun</button>
+</div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://rqjfekjvbrhsiwhmzwsb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser = null;
+let editingId = null;
+
+async function checkUser(){
+  const {data:{session}} = await db.auth.getSession();
+  currentUser = session?.user || null;
+  showPage();
+}
+
+function showPage(){
+  document.getElementById("status").style.display = currentUser ? "none" : "block";
+  document.getElementById("status").textContent = "Silakan login.";
+  document.getElementById("login").style.display = currentUser ? "none" : "block";
+  document.getElementById("app").style.display = currentUser ? "block" : "none";
+  if(currentUser) loadNotes();
+}
+
+async function login(){
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const {data,error} = await db.auth.signInWithPassword({email,password});
+  if(error) return alert(error.message);
+  currentUser = data.user;
+  showPage();
+}
+
+async function logout(){
+  await db.auth.signOut();
+  currentUser = null;
+  cancelEdit();
+  showPage();
+}
+
+async function loadNotes(){
+  const {data,error} = await db.from("notes")
+    .select("*").order("created_at",{ascending:false});
+  if(error) return alert("Gagal memuat: "+error.message);
+
+  const area = document.getElementById("notes");
+  area.innerHTML = "";
+
+  data.forEach(note=>{
+    const box = document.createElement("div");
+    box.className = "card";
+
+    const h = document.createElement("h3");
+    h.textContent = note.title || "(Tanpa judul)";
+
+    const p = document.createElement("div");
+    p.className = "note";
+    p.textContent = note.content || "";
+
+    const date = document.createElement("small");
+    date.textContent = note.created_at
+      ? new Date(note.created_at).toLocaleString("id-ID")
+      : "";
+
+    const edit = document.createElement("button");
+    edit.textContent = "Edit";
+    edit.className = "secondary";
+    edit.onclick = ()=>editNote(note);
+
+    const del = document.createElement("button");
+    del.textContent = "Hapus";
+    del.className = "danger";
+    del.onclick = ()=>deleteNote(note.id);
+
+    box.append(h,p,date,edit,del);
+    area.appendChild(box);
+  });
+}
+
+async function saveNote(){
+  const title = document.getElementById("title").value.trim();
+  const content = document.getElementById("content").value.trim();
+  if(!title && !content) return alert("Catatan masih kosong.");
+
+  let result;
+  if(editingId){
+    result = await db.from("notes")
+      .update({title,content})
+      .eq("id",editingId);
+  }else{
+    result = await db.from("notes").insert({
+      title,content,user_id:currentUser.id
+    });
+  }
+
+  if(result.error) return alert(result.error.message);
+  cancelEdit();
+  loadNotes();
+}
+
+function editNote(note){
+  editingId = note.id;
+  document.getElementById("title").value = note.title || "";
+  document.getElementById("content").value = note.content || "";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function cancelEdit(){
+  editingId = null;
+  document.getElementById("title").value = "";
+  document.getElementById("content").value = "";
+}
+
+async function deleteNote(id){
+  if(!confirm("Hapus catatan ini?")) return;
+  const {error} = await db.from("notes").delete().eq("id",id);
+  if(error) return alert(error.message);
+  loadNotes();
+}
+
+db.auth.onAuthStateChange((_event,session)=>{
+  currentUser = session?.user || null;
+  showPage();
+});
+
+checkUser();
+</script>
+</body>
+  </html>
+  
