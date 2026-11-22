@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -20,16 +19,17 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:wh
 .secondary{background:#e9ebf2;color:#222}
 .danger{background:#ffe7e7;color:#a22}
 .note{white-space:pre-wrap;overflow-wrap:anywhere}
-.note h3{margin-top:0}
-#app{display:none}
+#app,#resetBox{display:none}
 #status{padding:12px;color:#555}
 </style>
 </head>
 <body>
+
 <header>
 <h1>📝 CatatanKu</h1>
 <small>Catatan tersimpan online</small>
 </header>
+
 <main>
 <div id="status">Memuat...</div>
 
@@ -38,6 +38,15 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:wh
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 <button onclick="login()">Masuk</button>
+<button class="secondary" onclick="sendPasswordReset()">Lupa Password?</button>
+</div>
+
+<div id="resetBox" class="card">
+<h3>Ubah Password</h3>
+<p>Masukkan password baru kamu.</p>
+<input id="newPassword" type="password" placeholder="Password baru">
+<input id="confirmNewPassword" type="password" placeholder="Ulangi password baru">
+<button onclick="saveNewPassword()">Simpan Password Baru</button>
 </div>
 
 <div id="app">
@@ -50,6 +59,7 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:wh
 <div id="notes"></div>
 <button class="secondary" onclick="logout()">Keluar akun</button>
 </div>
+
 </main>
 
 <script>
@@ -57,8 +67,10 @@ const SUPABASE_URL = "https://rqjfekjvbrhsiwhmzwsb.supabase.co";
 const SUPABASE_KEY = "sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let currentUser = null;
 let editingId = null;
+let recoveryMode = false;
 
 async function checkUser(){
   const {data:{session}} = await db.auth.getSession();
@@ -67,19 +79,73 @@ async function checkUser(){
 }
 
 function showPage(){
-  document.getElementById("status").style.display = currentUser ? "none" : "block";
+  document.getElementById("status").style.display =
+    currentUser || recoveryMode ? "none" : "block";
+
   document.getElementById("status").textContent = "Silakan login.";
-  document.getElementById("login").style.display = currentUser ? "none" : "block";
-  document.getElementById("app").style.display = currentUser ? "block" : "none";
-  if(currentUser) loadNotes();
+
+  document.getElementById("login").style.display =
+    currentUser || recoveryMode ? "none" : "block";
+
+  document.getElementById("resetBox").style.display =
+    recoveryMode ? "block" : "none";
+
+  document.getElementById("app").style.display =
+    currentUser && !recoveryMode ? "block" : "none";
+
+  if(currentUser && !recoveryMode) loadNotes();
 }
 
 async function login(){
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const {data,error} = await db.auth.signInWithPassword({email,password});
+
+  const {data,error} = await db.auth.signInWithPassword({
+    email,password
+  });
+
   if(error) return alert(error.message);
+
   currentUser = data.user;
+  showPage();
+}
+
+async function sendPasswordReset(){
+  const email = document.getElementById("email").value.trim();
+
+  if(!email) return alert("Masukkan email akun terlebih dahulu.");
+
+  const {error} = await db.auth.resetPasswordForEmail(email,{
+    redirectTo: window.location.origin
+  });
+
+  if(error) return alert(error.message);
+
+  alert("Link pemulihan sudah dikirim. Periksa Gmail kamu.");
+}
+
+async function saveNewPassword(){
+  const pw = document.getElementById("newPassword").value;
+  const confirmPw = document.getElementById("confirmNewPassword").value;
+
+  if(pw.length < 8)
+    return alert("Password minimal 8 karakter.");
+
+  if(pw !== confirmPw)
+    return alert("Konfirmasi password tidak sama.");
+
+  const {error} = await db.auth.updateUser({
+    password: pw
+  });
+
+  if(error) return alert(error.message);
+
+  alert("Password berhasil diubah!");
+
+  recoveryMode = false;
+  document.getElementById("newPassword").value = "";
+  document.getElementById("confirmNewPassword").value = "";
+
   showPage();
 }
 
@@ -93,6 +159,7 @@ async function logout(){
 async function loadNotes(){
   const {data,error} = await db.from("notes")
     .select("*").order("created_at",{ascending:false});
+
   if(error) return alert("Gagal memuat: "+error.message);
 
   const area = document.getElementById("notes");
@@ -132,9 +199,12 @@ async function loadNotes(){
 async function saveNote(){
   const title = document.getElementById("title").value.trim();
   const content = document.getElementById("content").value.trim();
-  if(!title && !content) return alert("Catatan masih kosong.");
+
+  if(!title && !content)
+    return alert("Catatan masih kosong.");
 
   let result;
+
   if(editingId){
     result = await db.from("notes")
       .update({title,content})
@@ -146,6 +216,7 @@ async function saveNote(){
   }
 
   if(result.error) return alert(result.error.message);
+
   cancelEdit();
   loadNotes();
 }
@@ -165,18 +236,25 @@ function cancelEdit(){
 
 async function deleteNote(id){
   if(!confirm("Hapus catatan ini?")) return;
+
   const {error} = await db.from("notes").delete().eq("id",id);
+
   if(error) return alert(error.message);
+
   loadNotes();
 }
 
-db.auth.onAuthStateChange((_event,session)=>{
+db.auth.onAuthStateChange((event,session)=>{
   currentUser = session?.user || null;
+
+  if(event === "PASSWORD_RECOVERY"){
+    recoveryMode = true;
+  }
+
   showPage();
 });
 
 checkUser();
 </script>
 </body>
-  </html>
-  
+</html>
