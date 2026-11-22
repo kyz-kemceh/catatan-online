@@ -19,7 +19,7 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:wh
 .secondary{background:#e9ebf2;color:#222}
 .danger{background:#ffe7e7;color:#a22}
 .note{white-space:pre-wrap;overflow-wrap:anywhere}
-#app,#resetBox{display:none}
+#app,#resetBox,#signupBox{display:none}
 #status{padding:12px;color:#555}
 </style>
 </head>
@@ -34,11 +34,21 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:wh
 <div id="status">Memuat...</div>
 
 <div id="login" class="card" style="display:none">
-<h3>Login akun</h3>
-<input id="email" type="email" placeholder="Email">
+<h3>Login Akun</h3>
+<input id="email" type="email" placeholder="Gmail">
 <input id="password" type="password" placeholder="Password">
 <button onclick="login()">Masuk</button>
+<button class="secondary" onclick="showSignup()">Daftar Akun Baru</button>
 <button class="secondary" onclick="sendPasswordReset()">Lupa Password?</button>
+</div>
+
+<div id="signupBox" class="card">
+<h3>Daftar Akun Baru</h3>
+<input id="signupEmail" type="email" placeholder="Gmail kamu">
+<input id="signupPassword" type="password" placeholder="Buat password">
+<input id="signupConfirm" type="password" placeholder="Ulangi password">
+<button onclick="signup()">Daftar Sekarang</button>
+<button class="secondary" onclick="showLogin()">Kembali ke Login</button>
 </div>
 
 <div id="resetBox" class="card">
@@ -53,11 +63,11 @@ button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:wh
 <div class="card">
 <input id="title" placeholder="Judul catatan">
 <textarea id="content" placeholder="Tulis catatan di sini..."></textarea>
-<button onclick="saveNote()">Simpan catatan</button>
-<button class="secondary" onclick="cancelEdit()">Batal edit</button>
+<button onclick="saveNote()">Simpan Catatan</button>
+<button class="secondary" onclick="cancelEdit()">Batal Edit</button>
 </div>
 <div id="notes"></div>
-<button class="secondary" onclick="logout()">Keluar akun</button>
+<button class="secondary" onclick="logout()">Keluar Akun</button>
 </div>
 
 </main>
@@ -87,6 +97,8 @@ function showPage(){
   document.getElementById("login").style.display =
     currentUser || recoveryMode ? "none" : "block";
 
+  document.getElementById("signupBox").style.display = "none";
+
   document.getElementById("resetBox").style.display =
     recoveryMode ? "block" : "none";
 
@@ -94,6 +106,52 @@ function showPage(){
     currentUser && !recoveryMode ? "block" : "none";
 
   if(currentUser && !recoveryMode) loadNotes();
+}
+
+function showSignup(){
+  document.getElementById("login").style.display = "none";
+  document.getElementById("signupBox").style.display = "block";
+}
+
+function showLogin(){
+  document.getElementById("signupBox").style.display = "none";
+  document.getElementById("login").style.display = "block";
+}
+
+async function signup(){
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value;
+  const confirm = document.getElementById("signupConfirm").value;
+
+  if(!email || !password || !confirm)
+    return alert("Lengkapi semua kolom.");
+
+  if(password.length < 8)
+    return alert("Password minimal 8 karakter.");
+
+  if(password !== confirm)
+    return alert("Konfirmasi password tidak sama.");
+
+  const {data,error} = await db.auth.signUp({
+    email,
+    password,
+    options:{
+      emailRedirectTo:window.location.origin
+    }
+  });
+
+  if(error) return alert(error.message);
+
+  if(data.session){
+    currentUser = data.user;
+    alert("Pendaftaran berhasil!");
+    showPage();
+  }else{
+    alert("Pendaftaran berhasil. Silakan periksa Gmail kamu untuk konfirmasi akun.");
+    document.getElementById("signupPassword").value = "";
+    document.getElementById("signupConfirm").value = "";
+    showLogin();
+  }
 }
 
 async function login(){
@@ -113,15 +171,15 @@ async function login(){
 async function sendPasswordReset(){
   const email = document.getElementById("email").value.trim();
 
-  if(!email) return alert("Masukkan email akun terlebih dahulu.");
+  if(!email) return alert("Masukkan Gmail akun terlebih dahulu.");
 
   const {error} = await db.auth.resetPasswordForEmail(email,{
-    redirectTo: window.location.origin
+    redirectTo:window.location.origin
   });
 
   if(error) return alert(error.message);
 
-  alert("Link pemulihan sudah dikirim. Periksa Gmail kamu.");
+  alert("Link pemulihan dikirim. Periksa Gmail kamu.");
 }
 
 async function saveNewPassword(){
@@ -134,18 +192,13 @@ async function saveNewPassword(){
   if(pw !== confirmPw)
     return alert("Konfirmasi password tidak sama.");
 
-  const {error} = await db.auth.updateUser({
-    password: pw
-  });
+  const {error} = await db.auth.updateUser({password:pw});
 
   if(error) return alert(error.message);
 
   alert("Password berhasil diubah!");
 
   recoveryMode = false;
-  document.getElementById("newPassword").value = "";
-  document.getElementById("confirmNewPassword").value = "";
-
   showPage();
 }
 
