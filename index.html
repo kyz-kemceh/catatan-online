@@ -391,8 +391,34 @@ async function generateCustom(length){
   );
   }
 document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
-db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
-  // SOUND EFFECT KLIK
+
+db.auth.onAuthStateChange((event, session) => {
+
+  currentUser = session?.user || null;
+
+  if(event === "PASSWORD_RECOVERY"){
+    recoveryMode = true;
+  }
+
+  if(event === "SIGNED_OUT"){
+    recoveryMode = false;
+  }
+
+  showPage();
+
+  const adminButton = document.getElementById("adminButtonBox");
+
+  if(adminButton){
+    adminButton.style.display = "none";
+
+    if(currentUser && !recoveryMode &&
+       currentUser.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
+      adminButton.style.display = "block";
+    }
+  }
+
+}); 
+  //SOUND EFFECT KLIK
 let clickAudioCtx;
 
 document.addEventListener("click", function(event) {
