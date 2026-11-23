@@ -200,6 +200,51 @@ async function generateCustom(){const n=demoAmount();if(n===null)return;const su
 document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
 db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
 checkUser();
+  // SOUND EFFECT KLIK
+let clickAudioCtx;
+
+document.addEventListener("click", function(event) {
+  if (!event.target.closest("button")) return;
+
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioCtx) return;
+
+    if (!clickAudioCtx) {
+      clickAudioCtx = new AudioCtx();
+    }
+
+    if (clickAudioCtx.state === "suspended") {
+      clickAudioCtx.resume();
+    }
+
+    const now = clickAudioCtx.currentTime;
+
+    const osc = clickAudioCtx.createOscillator();
+    const gain = clickAudioCtx.createGain();
+
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(950, now);
+    osc.frequency.exponentialRampToValueAtTime(520, now + 0.055);
+
+    gain.gain.setValueAtTime(0.16, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+
+    osc.connect(gain);
+    gain.connect(clickAudioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.08);
+
+    if (navigator.vibrate) {
+      navigator.vibrate(18);
+    }
+
+  } catch (err) {
+    console.log("Sound error:", err);
+  }
+});
 </script>
 </body>
 </html>
