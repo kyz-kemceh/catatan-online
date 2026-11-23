@@ -196,7 +196,23 @@ const SUPABASE_KEY="sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null,editingId=null,recoveryMode=false;
 
-async function checkUser(){const {data:{session}}=await db.auth.getSession();currentUser=session?.user||null;showPage();}
+async function checkUser(){
+  const {data:{session}}=await db.auth.getSession();
+
+  currentUser = session?.user || null;
+
+  showPage();
+
+  const adminButton = document.getElementById("adminButtonBox");
+
+  if(adminButton){
+    adminButton.style.display = "none";
+  }
+
+  if(currentUser){
+    await initAdminButton();
+  }
+}
 function showPage(){
 document.getElementById("status").style.display=currentUser||recoveryMode?"none":"block";
 document.getElementById("status").textContent="Silakan login.";
