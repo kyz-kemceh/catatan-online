@@ -107,7 +107,7 @@ button:active {
 <button class="primary full" onclick="signup()">Daftar Sekarang →</button><button class="secondary full" onclick="showLogin()">← Kembali ke Login</button></div>
 <div id="resetBox" class="card"><h2 class="section-title">Password Baru 🔐</h2><p class="description">Buat password baru untuk akunmu.</p><input id="newPassword" type="password" placeholder="Password baru"><input id="confirmNewPassword" type="password" placeholder="Ulangi password baru"><button class="primary full" onclick="saveNewPassword()">Simpan Password Baru</button></div>
 <div id="app">
-<div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea><button class="primary" onclick="saveNote()">✦ Simpan Catatan</button><button class="secondary" onclick="cancelEdit()">Batal</button></div>
+<div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea><button class="primary" onclick="saveNote()">✦ Simpan Catatan</button><button class="secondary" onclick="cancelEdit()">Batal</button>
 <div class="card merge-card">
   <h2 class="section-title">⚡ Generate Alamat Gmail</h2>
   <p class="description">Buat Alamat Gmail Mu.</p>
@@ -319,7 +319,6 @@ function makeDemoNames(amount, length, suffix = ""){
 
   return [...set];
   }
-const syllables = [];
 
 const syllables = [];
 
@@ -441,6 +440,7 @@ document.addEventListener("click", function(event) {
     console.log("Sound error:", err);
   }
 });
+  checkUser();
 </script>
 </body>
 </html>
