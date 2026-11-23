@@ -319,16 +319,38 @@ function saveCustomSuffix(){
 }
 function demoAmount(){const n=Number(document.getElementById("generateAmount").value);if(![5,10,15].includes(n)){alert("Pilih jumlah 5, 10, atau 15 terlebih dahulu.");return null;}return n;}
 function makeDemoNames(amount,digits,suffix=""){
-const syllables=["qav","ren","tul","zun","vel","drax","nori","luma","vexa","ravi",
-"qor","zavi","nexa","dori","lavi","varen","xel","runa","tavi","mora",
-"krev","sova","yant","brel","wexi","orva","juni","fex","dalu","rhex",
-"nav","kora","zeth","vori","lhex","mavi","qena","rul","tova","zire",
-"navi","dren","kavo","syl","wora","favi","xen","bora","qeli","ravo",
-"tzen","lori","vanu","dexa","mire","zora","keli","nux","yora","fren",
-"qira","veln","sari","dova","xira","bex","rani","ture","zavi","kren",
-"melo","vexa","jora","neth","wavi","lorn","qavi","dren","selo","tari",
-"zuno","kira","rhex","vori","nela","fura","xavo","mira","bren","yavi",
-"luxa","qorn","deli","sava","thex","zeli","kova","ruxa","nori","wexa"];
+const syllables = [];
+
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+// Kombinasi 2 huruf
+for(let i = 0; i < 26; i++){
+  for(let j = 0; j < 26; j++){
+    syllables.push(alphabet[i] + alphabet[j]);
+  }
+}
+
+// Kombinasi 3 huruf
+for(let i = 0; i < 26; i++){
+  for(let j = 0; j < 26; j++){
+    for(let k = 0; k < 26; k++){
+      syllables.push(alphabet[i] + alphabet[j] + alphabet[k]);
+    }
+  }
+}
+
+// Kombinasi 4 huruf
+for(let i = 0; i < 26; i++){
+  for(let j = 0; j < 26; j++){
+    for(let k = 0; k < 26; k++){
+      for(let l = 0; l < 26; l++){
+        syllables.push(
+          alphabet[i] + alphabet[j] + alphabet[k] + alphabet[l]
+        );
+      }
+    }
+  }
+}
 const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.random()*2);for(let i=0;i<parts;i++)u+=syllables[Math.floor(Math.random()*syllables.length)];for(let i=0;i<digits;i++)u+=Math.floor(Math.random()*10);u+=suffix;set.add(u+"@gmail.com");}return [...set];
 }
 async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" alamat gmail tersimpan di catatan.";loadNotes();}
