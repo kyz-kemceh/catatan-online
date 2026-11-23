@@ -1,1212 +1,179 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jack Gmail Tools — Jack</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-* {
-  box-sizing: border-box;
-}
-
-:root {
-  --bg: #080b14;
-  --card: #111827;
-  --border: rgba(255,255,255,.08);
-  --blue: #60a5fa;
-  --purple: #a78bfa;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% 0%, #172554 0, transparent 35%),
-    radial-gradient(circle at 90% 20%, #2e1065 0, transparent 30%),
-    var(--bg);
-  color: var(--text);
-  font-family: system-ui, Arial, sans-serif;
-}
-
-header {
-  padding: 22px 20px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(8,11,20,.7);
-  backdrop-filter: blur(15px);
-}
-
-.header-inner {
-  max-width: 900px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-  background: linear-gradient(135deg,#2563eb,#7c3aed);
-  box-shadow: 0 0 25px #6366f155;
-}
-
-h1 {
-  margin: 0;
-  font-size: 21px;
-  letter-spacing: -.5px;
-}
-
-.subtitle {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.creator {
-  text-align: right;
-  padding-left: 12px;
-  border-left: 1px solid var(--border);
-}
-
-.creator small {
-  display: block;
-  color: #64748b;
-  font-size: 9px;
-  letter-spacing: 2px;
-}
-
-.creator strong {
-  display: block;
-  font-size: 13px;
-  letter-spacing: 2px;
-  background: linear-gradient(90deg,var(--blue),var(--purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-main {
-  max-width: 720px;
-  margin: auto;
-  padding: 28px 16px 60px;
-}
-
-#status {
-  text-align: center;
-  color: var(--muted);
-  padding: 20px;
-}
-
-.card {
-  background: linear-gradient(
-    145deg,
-    rgba(22,30,48,.95),
-    rgba(13,18,31,.95)
-  );
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 22px;
-  margin-bottom: 18px;
-  box-shadow: 0 12px 40px #00000025;
-  animation: appear .35s ease;
-}
-
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card h2,
-.card h3 {
-  margin-top: 0;
-}
-
-.section-title {
-  font-size: 20px;
-  margin-bottom: 6px;
-}
-
-.description {
-  color: var(--muted);
-  font-size: 13px;
-  margin-bottom: 20px;
-}
-
-input, textarea {
-  width: 100%;
-  background: #080d19;
-  color: white;
-  border: 1px solid #263247;
-  border-radius: 12px;
-  padding: 14px;
-  margin: 7px 0;
-  font-size: 15px;
-  outline: none;
-  transition: .2s;
-}
-
-input:focus, textarea:focus {
-  border-color: #818cf8;
-  box-shadow: 0 0 0 3px #6366f122;
-}
-
-textarea {
-  min-height: 150px;
-  resize: vertical;
-  line-height: 1.6;
-}
-
-button {
-  border: none;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin: 5px 3px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .2s;
-}
-
-button:active {
-  transform: scale(.97);
-}
-
-.primary {
-  color: white;
-  background: linear-gradient(135deg,#2563eb,#7c3aed);
-  box-shadow: 0 4px 18px #4f46e544;
-}
-
-.primary:hover {
-  box-shadow: 0 4px 25px #6366f177;
-  transform: translateY(-1px);
-}
-
-.secondary {
-  color: #cbd5e1;
-  background: #1e293b;
-  border: 1px solid #334155;
-}
-
-.secondary:hover {
-  background: #29364b;
-}
-
-.danger {
-  color: #fca5a5;
-  background: #3b171f;
-  border: 1px solid #7f1d1d55;
-}
-
-.danger:hover {
-  background: #501c27;
-}
-
-.full {
-  width: 100%;
-  margin: 8px 0;
-}
-
-#app, #resetBox, #signupBox {
-  display: none;
-}
-
-#notes {
-  margin-top: 24px;
-}
-
-.note-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.note-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(90deg,#3b82f6,#8b5cf6,transparent);
-}
-
-.note-title {
-  font-size: 18px;
-  overflow-wrap: anywhere;
-}
-
-.note {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  color: #cbd5e1;
-  line-height: 1.7;
-  margin: 12px 0;
-}
-
-.note-date {
-  color: #64748b;
-  font-size: 11px;
-}
-
-.note-actions {
-  margin-top: 14px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.empty {
-  text-align: center;
-  color: #64748b;
-  padding: 30px 10px;
-}
-
-.footer {
-  text-align: center;
-  padding-top: 30px;
-  color: #475569;
-  font-size: 12px;
-}
-
-.footer span {
-  color: #818cf8;
-}
-
-@media(max-width:480px) {
-  header {
-    padding: 16px;
-  }
-
-  h1 {
-    font-size: 18px;
-  }
-
-  .logo {
-    width: 38px;
-    height: 38px;
-  }
-
-  main {
-    padding: 20px 12px 40px;
-  }
-
-  .card {
-    padding: 17px;
-    border-radius: 17px;
-  }
-
-  .creator strong {
-    font-size: 11px;
-  }
-}
-  
-.merge-card {
-  border: 1px solid #6366f155;
-  background:
-    radial-gradient(circle at top right,#312e8150,transparent 60%),
-    linear-gradient(145deg,#111827,#0c1220);
-}
-
-#mergedEmails {
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.8;
-  border-color: #6366f155;
-  }
-  
+*{box-sizing:border-box}
+:root{--bg:#080b14;--border:rgba(255,255,255,.08);--blue:#60a5fa;--purple:#a78bfa;--text:#f1f5f9;--muted:#94a3b8}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 0%,#172554 0,transparent 35%),radial-gradient(circle at 90% 20%,#2e1065 0,transparent 30%),var(--bg);color:var(--text);font-family:system-ui,Arial,sans-serif}
+header{padding:22px 20px;border-bottom:1px solid var(--border);background:rgba(8,11,20,.7);backdrop-filter:blur(15px)}
+.header-inner{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#2563eb,#7c3aed);box-shadow:0 0 25px #6366f155}
+h1{margin:0;font-size:21px;letter-spacing:-.5px}.subtitle{color:var(--muted);font-size:12px}
+.creator{text-align:right;padding-left:12px;border-left:1px solid var(--border)}.creator small{display:block;color:#64748b;font-size:9px;letter-spacing:2px}.creator strong{display:block;font-size:13px;letter-spacing:2px;background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+main{max-width:720px;margin:auto;padding:28px 16px 60px}#status{text-align:center;color:var(--muted);padding:20px}
+.card{background:linear-gradient(145deg,rgba(22,30,48,.95),rgba(13,18,31,.95));border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:18px;box-shadow:0 12px 40px #00000025;animation:appear .35s ease}
+@keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-size:20px;margin:0 0 6px}.description{color:var(--muted);font-size:13px;margin-bottom:20px}
+input,textarea{width:100%;background:#080d19;color:white;border:1px solid #263247;border-radius:12px;padding:14px;margin:7px 0;font-size:15px;outline:none}
+input:focus,textarea:focus{border-color:#818cf8;box-shadow:0 0 0 3px #6366f122}
+textarea{min-height:150px;resize:vertical;line-height:1.6}
+button{border:none;border-radius:12px;padding:12px 16px;margin:5px 3px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+button:active{transform:scale(.97)}.primary{color:white;background:linear-gradient(135deg,#2563eb,#7c3aed);box-shadow:0 4px 18px #4f46e544}.secondary{color:#cbd5e1;background:#1e293b;border:1px solid #334155}.danger{color:#fca5a5;background:#3b171f;border:1px solid #7f1d1d55}.full{width:100%;margin:8px 0}
+#app,#resetBox,#signupBox{display:none}#notes{margin-top:24px}
+.note-card{position:relative;overflow:hidden}.note-card::before{content:"";position:absolute;top:0;left:0;height:2px;width:100%;background:linear-gradient(90deg,#3b82f6,#8b5cf6,transparent)}
+.note-title{font-size:18px;overflow-wrap:anywhere}.note{white-space:pre-wrap;overflow-wrap:anywhere;color:#cbd5e1;line-height:1.7;margin:12px 0}.note-date{color:#64748b;font-size:11px}.note-actions{margin-top:14px;display:flex;flex-wrap:wrap}.empty{text-align:center;color:#64748b;padding:30px 10px}
+.merge-card{border:1px solid #6366f155;background:radial-gradient(circle at top right,#312e8150,transparent 60%),linear-gradient(145deg,#111827,#0c1220)}
+#mergedEmails{font-family:monospace;font-size:14px;line-height:1.8;border-color:#6366f155}
+.footer{text-align:center;padding-top:30px;color:#475569;font-size:12px}.footer span{color:#818cf8}
+@media(max-width:480px){header{padding:16px}h1{font-size:18px}.logo{width:38px;height:38px}main{padding:20px 12px 40px}.card{padding:17px;border-radius:17px}.creator strong{font-size:11px}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <div class="logo">✦</div>
-      <div>
-        <h1>Jack Gmail Tools</h1>
-<div class="subtitle">Your personal Gmail organizer</div>
-    </div>
-
-    <div class="creator">
-      <small>CREATED BY</small>
-      <strong>✦ JACK ✦</strong>
-    </div>
-  </div>
-</header>
-
+<header><div class="header-inner"><div class="brand"><div class="logo">✦</div><div><h1>Jack Gmail Tools</h1><div class="subtitle">Your personal notes organizer</div></div></div><div class="creator"><small>CREATED BY</small><strong>✦ JACK ✦</strong></div></div></header>
 <main>
-
 <div id="status">Memuat...</div>
-
-<!-- LOGIN -->
 <div id="login" class="card">
-  <h2 class="section-title">Selamat datang ✨</h2>
-  <p class="description">
-    Masuk ke ruang catatan pribadimu.
-  </p>
-
-  <input id="email" type="email" placeholder="Alamat Gmail">
-  <input id="password" type="password" placeholder="Password">
-
-  <button class="primary full" onclick="login()">
-    Masuk ke Akun →
-  </button>
-
-  <button class="secondary full" onclick="showSignup()">
-    ✦ Buat Akun Baru
-  </button>
-
-  <button class="secondary full" onclick="sendPasswordReset()">
-    Lupa Password?
-  </button>
+<h2 class="section-title">Selamat datang ✨</h2><p class="description">Masuk ke ruang catatan pribadimu.</p>
+<input id="email" type="email" placeholder="Alamat email"><input id="password" type="password" placeholder="Password">
+<button class="primary full" onclick="login()">Masuk ke Akun →</button><button class="secondary full" onclick="showSignup()">✦ Buat Akun Baru</button><button class="secondary full" onclick="sendPasswordReset()">Lupa Password?</button>
 </div>
-
-<!-- REGISTER -->
-<div id="signupBox" class="card">
-  <h2 class="section-title">Buat akun baru ✦</h2>
-  <p class="description">
-    Buat ruang pribadi untuk menyimpan pikiranmu.
-  </p>
-
-  <input id="signupEmail" type="email" placeholder="Gmail kamu">
-  <input id="signupPassword" type="password" placeholder="Buat password">
-  <input id="signupConfirm" type="password" placeholder="Ulangi password">
-
-  <button class="primary full" onclick="signup()">
-    Daftar Sekarang →
-  </button>
-
-  <button class="secondary full" onclick="showLogin()">
-    ← Kembali ke Login
-  </button>
-</div>
-
-<!-- RESET PASSWORD -->
-<div id="resetBox" class="card">
-  <h2 class="section-title">Password Baru 🔐</h2>
-  <p class="description">
-    Buat password baru untuk akunmu.
-  </p>
-
-  <input id="newPassword" type="password" placeholder="Password baru">
-  <input id="confirmNewPassword" type="password" placeholder="Ulangi password baru">
-
-  <button class="primary full" onclick="saveNewPassword()">
-    Simpan Password Baru
-  </button>
-</div>
-
-<!-- APP -->
+<div id="signupBox" class="card"><h2 class="section-title">Buat akun baru ✦</h2><p class="description">Buat ruang pribadi untuk menyimpan catatanmu.</p>
+<input id="signupEmail" type="email" placeholder="Alamat email"><input id="signupPassword" type="password" placeholder="Buat password"><input id="signupConfirm" type="password" placeholder="Ulangi password">
+<button class="primary full" onclick="signup()">Daftar Sekarang →</button><button class="secondary full" onclick="showLogin()">← Kembali ke Login</button></div>
+<div id="resetBox" class="card"><h2 class="section-title">Password Baru 🔐</h2><p class="description">Buat password baru untuk akunmu.</p><input id="newPassword" type="password" placeholder="Password baru"><input id="confirmNewPassword" type="password" placeholder="Ulangi password baru"><button class="primary full" onclick="saveNewPassword()">Simpan Password Baru</button></div>
 <div id="app">
-
-  <div class="card">
-    <h2 class="section-title">✦ Tulis sesuatu</h2>
-    <p class="description">
-      Simpan catatan gmailmu,atau hal yang ingin kamu ingat.
-    </p>
-
-    <input id="title" placeholder="Judul catatan">
-
-    <textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea>
-
-    <button class="primary" onclick="saveNote()">
-      ✦ Simpan Catatan
-    </button>
-
-    <button class="secondary" onclick="cancelEdit()">
-      Batal
-    </button>
-  </div>
-
-  
-<div class="card merge-card">
-  <h2 class="section-title">⚡ Generate Username</h2>
-  <p class="description">Generate username sesuai pilihanmu.</p>
-
-  <div style="display:flex;gap:10px">
-    <button class="primary" onclick="showGenerateMode('free')">
-      🎲 Bebas
-    </button>
-    <button class="primary" onclick="showGenerateMode('custom')">
-      ⚙️ Custom
-    </button>
-  </div>
-
-  <div id="freeOptions" style="display:none;margin-top:15px">
-    <p class="description">Pilih jumlah:</p>
-
-    <div style="display:flex;gap:10px">
-      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
-      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
-      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
-    </div>
-
-    <div id="freeGenerateButtons" style="display:none;margin-top:15px">
-      <p class="description">Pilih variasi:</p>
-
-      <button class="primary full" onclick="generateFree(0)">
-        Tanpa Angka
-      </button>
-
-      <button class="primary full" onclick="generateFree(2)">
-        2 Angka
-      </button>
-
-      <button class="primary full" onclick="generateFree(3)">
-        3 Angka
-      </button>
-    </div>
-  </div>
-
-  <div id="customOptions" style="display:none;margin-top:15px">
-    <p class="description">Pilih jumlah:</p>
-
-    <div style="display:flex;gap:10px">
-      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
-      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
-      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
-    </div>
-
-    <div id="customGenerateButtons" style="display:none;margin-top:15px">
-      <input
-        id="customSuffix"
-        type="text"
-        placeholder="Masukkan akhiran custom"
-      >
-
-      <button class="primary full" onclick="saveCustomSuffix()">
-        💾 Simpan Custom
-      </button>
-
-      <button class="primary full" onclick="generateCustom()">
-        ✨ Generate
-      </button>
-    </div>
-  </div>
-
-  <input id="generateAmount" type="hidden" value="">
-
-  <div id="customStatus" class="description" style="margin-top:12px"></div>
+<div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea><button class="primary" onclick="saveNote()">✦ Simpan Catatan</button><button class="secondary" onclick="cancelEdit()">Batal</button></div>
+<div class="card merge-card"><h2 class="section-title">⚡ Generate Username Demo</h2><p class="description">Buat username contoh untuk pengujian (menggunakan domain example.com, bukan Gmail).</p>
+<div style="display:flex;gap:10px"><button class="primary" onclick="showGenerateMode('free')">🎲 Bebas</button><button class="secondary" onclick="showGenerateMode('custom')">⚙️ Custom</button></div>
+<div id="freeOptions" style="display:none;margin-top:15px"><p class="description">Pilih jumlah username demo:</p><div style="display:flex;gap:10px"><button class="primary" onclick="chooseGenerateAmount(5)">5</button><button class="primary" onclick="chooseGenerateAmount(10)">10</button><button class="primary" onclick="chooseGenerateAmount(15)">15</button></div><div id="freeGenerateButtons" style="display:none;margin-top:15px"><p class="description">Variasi:</p><button class="primary full" onclick="generateFree(0)">Tanpa Angka</button><button class="primary full" onclick="generateFree(2)">2 Angka</button><button class="primary full" onclick="generateFree(3)">3 Angka</button></div></div>
+<div id="customOptions" style="display:none;margin-top:15px"><p class="description">Pilih jumlah username demo:</p><div style="display:flex;gap:10px"><button class="primary" onclick="chooseGenerateAmount(5)">5</button><button class="primary" onclick="chooseGenerateAmount(10)">10</button><button class="primary" onclick="chooseGenerateAmount(15)">15</button></div><div id="customGenerateButtons" style="display:none;margin-top:15px"><input id="customSuffix" type="text" placeholder="Masukkan akhiran custom"><button class="secondary full" onclick="saveCustomSuffix()">💾 Simpan Custom</button><button class="primary full" onclick="generateCustom()">✨ Generate Demo</button></div></div>
+<input id="generateAmount" type="hidden" value=""><div id="customStatus" class="description" style="margin-top:12px"></div></div>
+<div class="card merge-card"><h2 class="section-title">✦ Gabungkan teks email</h2><p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p><button class="primary full" onclick="mergeAllGmail()">✦ Gabungkan Semua Email</button><div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div><textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea><button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button><button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button><button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>
+<p class="description" style="margin-left:5px">Semua catatan pribadimu.</p><div id="notes"></div><button class="danger full" onclick="deleteAllNotes()">🗑️ Hapus Semua Catatan</button><button class="danger full" onclick="logout()">Keluar dari Akun</button>
 </div>
-
-  <div id="freeOptions" style="display:none;margin-top:15px">
-    <p class="description">Jumlah angka di belakang:</p>
-
-    <div style="display:flex;gap:8px">
-      <button class="primary" style="flex:1"
-        onclick="generateFree(0)">Tanpa angka</button>
-
-      <button class="primary" style="flex:1"
-        onclick="generateFree(2)">2 angka</button>
-
-      <button class="primary" style="flex:1"
-        onclick="generateFree(3)">3 angka</button>
-    </div>
-  </div>
-
-  <div id="customOptions" style="display:none;margin-top:15px">
-    <input
-      id="customSuffix"
-      type="text"
-      placeholder="Masukkan custom akhiran"
-    >
-
-    <button class="secondary full"
-      onclick="saveCustomSuffix()">
-      💾 Simpan Custom
-    </button>
-
-    <button class="primary full"
-      style="margin-top:10px"
-      onclick="generateCustom()">
-      🚀 Generate Custom
-    </button>
-  </div>
-
-  <div id="customStatus" class="description"
-    style="margin-top:12px"></div>
-</div>
-  <p class="description">
-    Satukan semua Gmail dari seluruh catatanmu menjadi satu daftar.
-  </p>
-
-  <button class="primary full" onclick="mergeAllGmail()">
-    ✦ Gabungkan Semua Gmail
-  </button>
-
-  <div id="mergeResult" style="display:none;margin-top:15px">
-    <div id="mergeCount" class="description"></div>
-
-    <textarea id="mergedEmails" readonly
-      placeholder="Hasil gabungan Gmail akan muncul di sini..."
-      style="min-height:220px"></textarea>
-
-    <button class="primary full" onclick="copyMergedEmails()">
-      📋 Salin Semua Gmail
-    </button>
-
-    <button class="secondary full" onclick="saveMergedNote()">
-      💾 Simpan sebagai Catatan Baru
-    </button>
-    <button class="danger full" onclick="clearMergedEmails()">
-  🗑️ Hapus Hasil Gabungan
-    </button>
-  </div>
-</div>
-
-
-  <p class="description" style="margin-left:5px">
-    Semua catatan pribadimu.
-  </p>
-
-  <div id="notes"></div>
-
-  <button class="danger full" onclick="logout()">
-    Keluar dari Akun
-  </button>
-
-</div>
-
-<div class="footer">
-  Designed with <span>✦</span> Jack
-</div>
-
+<div class="footer">Designed with <span>✦</span> Jack</div>
 </main>
-
 <script>
-const SUPABASE_URL = "https://rqjfekjvbrhsiwhmzwsb.supabase.co";
-const SUPABASE_KEY = "sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
+const SUPABASE_URL="https://rqjfekjvbrhsiwhmzwsb.supabase.co";
+const SUPABASE_KEY="sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentUser=null,editingId=null,recoveryMode=false;
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-let currentUser = null;
-let editingId = null;
-let recoveryMode = false;
-
-async function checkUser() {
-  const {data:{session}} = await db.auth.getSession();
-  currentUser = session?.user || null;
-  showPage();
+async function checkUser(){const {data:{session}}=await db.auth.getSession();currentUser=session?.user||null;showPage();}
+function showPage(){
+document.getElementById("status").style.display=currentUser||recoveryMode?"none":"block";
+document.getElementById("status").textContent="Silakan login.";
+document.getElementById("login").style.display=currentUser||recoveryMode?"none":"block";
+document.getElementById("signupBox").style.display="none";
+document.getElementById("resetBox").style.display=recoveryMode?"block":"none";
+document.getElementById("app").style.display=currentUser&&!recoveryMode?"block":"none";
+if(currentUser&&!recoveryMode)loadNotes();
 }
-
-function showPage() {
-  document.getElementById("status").style.display =
-    currentUser || recoveryMode ? "none" : "block";
-
-  document.getElementById("status").textContent = "Silakan login.";
-
-  document.getElementById("login").style.display =
-    currentUser || recoveryMode ? "none" : "block";
-
-  document.getElementById("signupBox").style.display = "none";
-
-  document.getElementById("resetBox").style.display =
-    recoveryMode ? "block" : "none";
-
-  document.getElementById("app").style.display =
-    currentUser && !recoveryMode ? "block" : "none";
-
-  if(currentUser && !recoveryMode) loadNotes();
+function showSignup(){document.getElementById("login").style.display="none";document.getElementById("signupBox").style.display="block";}
+function showLogin(){document.getElementById("signupBox").style.display="none";document.getElementById("login").style.display="block";}
+async function signup(){
+const email=document.getElementById("signupEmail").value.trim(),password=document.getElementById("signupPassword").value,confirmPw=document.getElementById("signupConfirm").value;
+if(!email||!password||!confirmPw)return alert("Lengkapi semua kolom.");
+if(password.length<8)return alert("Password minimal 8 karakter.");
+if(password!==confirmPw)return alert("Konfirmasi password tidak sama.");
+const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin}});
+if(error)return alert(error.message);
+if(data.session){currentUser=data.user;alert("Pendaftaran berhasil!");showPage();}
+else{alert("Pendaftaran berhasil. Silakan cek email jika konfirmasi diperlukan, lalu login.");document.getElementById("signupPassword").value="";document.getElementById("signupConfirm").value="";showLogin();}
 }
-
-function showSignup() {
-  document.getElementById("login").style.display = "none";
-  document.getElementById("signupBox").style.display = "block";
+async function login(){
+const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+if(!email||!password)return alert("Isi email dan password terlebih dahulu.");
+const {data,error}=await db.auth.signInWithPassword({email,password});
+if(error)return alert(error.message);
+currentUser=data.user;showPage();
 }
-
-function showLogin() {
-  document.getElementById("signupBox").style.display = "none";
-  document.getElementById("login").style.display = "block";
+async function sendPasswordReset(){
+const email=document.getElementById("email").value.trim();if(!email)return alert("Masukkan email akun terlebih dahulu.");
+const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin});
+if(error)return alert(error.message);alert("Link pemulihan dikirim. Periksa email kamu.");
 }
-
-async function signup() {
-  const email = document.getElementById("signupEmail").value.trim();
-  const password = document.getElementById("signupPassword").value;
-  const confirm = document.getElementById("signupConfirm").value;
-
-  if(!email || !password || !confirm)
-    return alert("Lengkapi semua kolom.");
-
-  if(password.length < 8)
-    return alert("Password minimal 8 karakter.");
-
-  if(password !== confirm)
-    return alert("Konfirmasi password tidak sama.");
-
-  const {data,error} = await db.auth.signUp({
-    email,
-    password,
-    options:{
-      emailRedirectTo:window.location.origin
-    }
-  });
-
-  if(error) return alert(error.message);
-
-  if(data.session) {
-    currentUser = data.user;
-    alert("Pendaftaran berhasil!");
-    showPage();
-  } else {
-    alert("Pendaftaran berhasil. Silakan login.");
-    document.getElementById("signupPassword").value = "";
-    document.getElementById("signupConfirm").value = "";
-    showLogin();
-  }
+async function saveNewPassword(){
+const pw=document.getElementById("newPassword").value,confirmPw=document.getElementById("confirmNewPassword").value;
+if(pw.length<8)return alert("Password minimal 8 karakter.");
+if(pw!==confirmPw)return alert("Konfirmasi password tidak sama.");
+const {error}=await db.auth.updateUser({password:pw});if(error)return alert(error.message);
+alert("Password berhasil diubah!");recoveryMode=false;showPage();
 }
-
-async function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  if(!email || !password)
-    return alert("Isi Gmail dan password terlebih dahulu.");
-
-  const {data,error} = await db.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if(error) return alert(error.message);
-
-  currentUser = data.user;
-  showPage();
-}
-
-async function sendPasswordReset() {
-  const email = document.getElementById("email").value.trim();
-
-  if(!email)
-    return alert("Masukkan Gmail akun terlebih dahulu.");
-
-  const {error} = await db.auth.resetPasswordForEmail(email,{
-    redirectTo:window.location.origin
-  });
-
-  if(error) return alert(error.message);
-
-  alert("Link pemulihan dikirim. Periksa Gmail kamu.");
-}
-
-async function saveNewPassword() {
-  const pw = document.getElementById("newPassword").value;
-  const confirmPw = document.getElementById("confirmNewPassword").value;
-
-  if(pw.length < 8)
-    return alert("Password minimal 8 karakter.");
-
-  if(pw !== confirmPw)
-    return alert("Konfirmasi password tidak sama.");
-
-  const {error} = await db.auth.updateUser({
-    password:pw
-  });
-
-  if(error) return alert(error.message);
-
-  alert("Password berhasil diubah!");
-
-  recoveryMode = false;
-  showPage();
-}
-
-async function logout() {
-  await db.auth.signOut();
-
-  currentUser = null;
-  cancelEdit();
-  showPage();
-}
-
-async function loadNotes() {
-  const {data,error} = await db
-    .from("notes")
-    .select("*")
-    .order("created_at",{ascending:false});
-
-  if(error) return alert("Gagal memuat: "+error.message);
-
-  const area = document.getElementById("notes");
-  area.innerHTML = "";
-
-  if(!data.length) {
-    area.innerHTML = `
-      <div class="card empty">
-        ✦<br><br>
-        Belum ada catatan gmail.<br>
-        Mulai tulis catatan gmail pertamamu.
-      </div>
-    `;
-    return;
-  }
-
-  data.forEach(note => {
-    const box = document.createElement("div");
-    box.className = "card note-card";
-
-    const h = document.createElement("h3");
-    h.className = "note-title";
-    h.textContent = note.title || "(Tanpa judul)";
-
-    const p = document.createElement("div");
-    p.className = "note";
-    p.textContent = note.content || "";
-
-    const date = document.createElement("div");
-    date.className = "note-date";
-    date.textContent = note.created_at
-      ? new Date(note.created_at).toLocaleString("id-ID")
-      : "";
-
-    const actions = document.createElement("div");
-    actions.className = "note-actions";
-
-    const edit = document.createElement("button");
-    edit.textContent = "✎ Edit";
-    edit.className = "secondary";
-    edit.onclick = () => editNote(note);
-
-    const del = document.createElement("button");
-    del.textContent = "✕ Hapus";
-    del.className = "danger";
-    del.onclick = () => deleteNote(note.id);
-
-    actions.append(edit,del);
-    box.append(h,p,date,actions);
-    area.appendChild(box);
-  });
-}
-
-async function saveNote() {
-  const title = document.getElementById("title").value.trim();
-  const content = document.getElementById("content").value.trim();
-
-  if(!title && !content)
-    return alert("Catatan masih kosong.");
-
-  let result;
-
-  if(editingId) {
-    result = await db
-      .from("notes")
-      .update({title,content})
-      .eq("id",editingId);
-  } else {
-    result = await db
-      .from("notes")
-      .insert({
-        title,
-        content,
-        user_id:currentUser.id
-      });
-  }
-
-  if(result.error)
-    return alert(result.error.message);
-
-  cancelEdit();
-  loadNotes();
-}
-
-function editNote(note) {
-  editingId = note.id;
-
-  document.getElementById("title").value = note.title || "";
-  document.getElementById("content").value = note.content || "";
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-function cancelEdit() {
-  editingId = null;
-  document.getElementById("title").value = "";
-  document.getElementById("content").value = "";
-}
-
-async function deleteNote(id) {
-  if(!confirm("Hapus catatan ini?"))
-    return;
-
-  const {error} = await db
-    .from("notes")
-    .delete()
-    .eq("id",id);
-
-  if(error) return alert(error.message);
-
-  loadNotes();
-}
-
-async function mergeAllGmail() {
-  const {data,error} = await db
-    .from("notes")
-    .select("title,content")
-    .order("created_at",{ascending:true});
-
-  if(error) {
-    return alert("Gagal mengambil catatan: " + error.message);
-  }
-
-  const allText = data
-    .map(note => (note.title || "") + "\n" + (note.content || ""))
-    .join("\n");
-
-  const matches = allText.match(
-    /[a-zA-Z0-9._%+-]+@gmail\.com/gi
-  ) || [];
-
-  const uniqueEmails = [...new Set(
-    matches.map(email => email.toLowerCase())
-  )];
-
-  if(uniqueEmails.length === 0) {
-    return alert("Tidak ditemukan Gmail di catatanmu.");
-  }
-
-  document.getElementById("mergedEmails").value =
-    uniqueEmails.join("\n");
-
-  document.getElementById("mergeCount").textContent =
-    "Berhasil menggabungkan " +
-    uniqueEmails.length +
-    " Gmail unik.";
-
-  document.getElementById("mergeResult").style.display = "block";
-
-  document.getElementById("mergeResult").scrollIntoView({
-    behavior:"smooth",
-    block:"nearest"
-  });
-}
-  function clearMergedEmails() {
-  if(!confirm("Yakin ingin menghapus semua Gmail dari hasil gabungan?")) return;
-
-  document.getElementById("mergedEmails").value = "";
-  document.getElementById("mergeCount").textContent = "0 Gmail";
-  document.getElementById("mergeResult").style.display = "block";
-
-  alert("Semua Gmail hasil gabungan berhasil dihapus!");
-  }
-
-async function copyMergedEmails() {
-  const text = document.getElementById("mergedEmails").value;
-
-  if(!text) return alert("Belum ada Gmail untuk disalin.");
-
-  try {
-    await navigator.clipboard.writeText(text);
-    alert("Semua Gmail berhasil disalin!");
-  } catch(error) {
-    const area = document.getElementById("mergedEmails");
-    area.focus();
-    area.select();
-
-    const success = document.execCommand("copy");
-
-    if(success) {
-      alert("Semua Gmail berhasil disalin!");
-    } else {
-      alert("Tekan lama teks lalu pilih Salin.");
-    }
-  }
-}
-
-async function saveMergedNote() {
-  const content = document.getElementById("mergedEmails").value;
-
-  if(!content) return alert("Belum ada hasil Gmail.");
-
-  const {error} = await db
-    .from("notes")
-    .insert({
-      title:"Gabungan Gmail",
-      content:content,
-      user_id:currentUser.id
-    });
-
-  if(error) return alert("Gagal menyimpan: " + error.message);
-
-  alert("Gabungan Gmail berhasil disimpan menjadi catatan baru!");
-
-  loadNotes();
-  }
-    
-function showGenerateMode(mode) {
-  document.getElementById("freeOptions").style.display =
-    mode === "free" ? "block" : "none";
-
-  document.getElementById("customOptions").style.display =
-    mode === "custom" ? "block" : "none";
-
-  document.getElementById("freeGenerateButtons").style.display = "none";
-  document.getElementById("customGenerateButtons").style.display = "none";
-
-  document.getElementById("generateAmount").value = "";
-
-  document.getElementById("customStatus").textContent = "";
-}
-
-function chooseGenerateAmount(amount) {
-  document.getElementById("generateAmount").value = amount;
-
-  const freeVisible =
-    document.getElementById("freeOptions").style.display !== "none";
-
-  document.getElementById("freeGenerateButtons").style.display =
-    freeVisible ? "block" : "none";
-
-  document.getElementById("customGenerateButtons").style.display =
-    freeVisible ? "none" : "block";
-
-  document.getElementById("customStatus").textContent =
-    "Jumlah dipilih: " + amount;
-}
-
-function saveCustomSuffix() {
-  const suffix = document.getElementById("customSuffix").value
-    .trim()
-    .replace(/[^a-zA-Z0-9]/g, "");
-
-  if (!suffix) return alert("Masukkan custom terlebih dahulu!");
-
-  localStorage.setItem("customSuffix", suffix);
-  document.getElementById("customSuffix").value = suffix;
-
-  alert("Custom berhasil disimpan: " + suffix);
-}
-
-function getGenerateAmount() {
-  const amount = Number(
-    document.getElementById("generateAmount").value
-  );
-
-  if (!Number.isInteger(amount) || amount < 1 || amount > 1000) {
-    alert("Masukkan jumlah antara 1 sampai 1000!");
-    return null;
-  }
-
-  return amount;
-}
-
-function createUsernames(amount, digitCount, suffix = "") {
-  const syllables = [
-    "qav", "ren", "tul", "zun", "vel",
-    "drax", "nori", "luma", "vexa", "ravi",
-    "qor", "zavi", "nexa", "dori", "lavi",
-    "varen", "xel", "runa", "tavi", "mora",
-    "krev", "sova", "yant", "brel", "wexi",
-    "orva", "juni", "fex", "dalu", "rhex"
-  ];
-
-  const results = new Set();
-
-  while (results.size < amount) {
-    let username = "";
-    const parts = 3 + Math.floor(Math.random() * 2);
-
-    for (let i = 0; i < parts; i++) {
-      username += syllables[
-        Math.floor(Math.random() * syllables.length)
-      ];
-    }
-
-    for (let i = 0; i < digitCount; i++) {
-      username += Math.floor(Math.random() * 10);
-    }
-
-    username += suffix;
-    results.add(username + "@example.com");
-  }
-
-  return [...results];
-}
-
-async function saveGeneratedEmails(emails, title) {
-  if (!currentUser) return alert("Silakan login terlebih dahulu!");
-
-  const { error } = await db.from("notes").insert({
-    title: title,
-    content: emails.join("\n"),
-    user_id: currentUser.id
-  });
-
-  if (error) return alert("Gagal menyimpan: " + error.message);
-
-  document.getElementById("customStatus").textContent =
-    emails.length + " username berhasil disimpan ke catatan.";
-
-  await loadNotes();
-}
-
-async function generateFree(digitCount) {
-  const amount = getGenerateAmount();
-  if (amount === null) return;
-
-  const emails = createUsernames(amount, digitCount);
-
-  const label = digitCount === 0
-    ? "Tanpa Angka"
-    : digitCount + " Angka";
-
-  await saveGeneratedEmails(
-    emails,
-    "Generate Bebas — " + label + " (" + amount + ")"
-  );
-}
-
-async function generateCustom() {
-  const amount = getGenerateAmount();
-  if (amount === null) return;
-
-  const suffix = localStorage.getItem("customSuffix");
-
-  if (!suffix) return alert("Simpan custom terlebih dahulu!");
-
-  const emails = createUsernames(amount, 0, suffix);
-
-  await saveGeneratedEmails(
-    emails,
-    "Generate Custom — " + suffix + " (" + amount + ")"
-  );
-}
-
-document.getElementById("customSuffix").value =
-  localStorage.getItem("customSuffix") || "";
-
-const emails = [];
-
-  for (let i = 0; i < amount; i++) {
-    let username = "";
-
-    const parts = 3 + Math.floor(Math.random() * 2);
-
-for (let j = 0; j < parts; j++) {
-  username += syllables[
-    Math.floor(Math.random() * syllables.length)
-  ];
-}
-
-    emails.push(username + suffix + "@gmail.com");
-  }
-
-  const content = emails.join("\n");
-
-  const { error } = await db
-    .from("notes")
-    .insert({
-      title: "Generate Custom — " + suffix + " (" + amount + ")",
-      content: content,
-      user_id: currentUser.id
-    });
-
-  if (error) {
-    return alert("Gagal menyimpan: " + error.message);
-  }
-
-  document.getElementById("customStatus").textContent =
-    amount + " username berhasil disimpan ke Catatan Tersimpan.";
-
-  await loadNotes();
-}
-
-document.getElementById("customSuffix").value =
-  localStorage.getItem("customSuffix") || "";
-    
-db.auth.onAuthStateChange((event,session) => {
-  currentUser = session?.user || null;
-
-  if(event === "PASSWORD_RECOVERY")
-    recoveryMode = true;
-
-  showPage();
+async function logout(){await db.auth.signOut();currentUser=null;cancelEdit();showPage();}
+async function loadNotes(){
+const {data,error}=await db.from("notes").select("*").order("created_at",{ascending:false});
+if(error)return alert("Gagal memuat catatan: "+error.message);
+const area=document.getElementById("notes");area.innerHTML="";
+if(!data||!data.length){area.innerHTML='<div class="card empty">✦<br><br>Belum ada catatan.<br>Mulai tulis catatan pertamamu.</div>';return;}
+data.forEach(note=>{
+const box=document.createElement("div");box.className="card note-card";
+const h=document.createElement("h3");h.className="note-title";h.textContent=note.title||"(Tanpa judul)";
+const p=document.createElement("div");p.className="note";p.textContent=note.content||"";
+const date=document.createElement("div");date.className="note-date";date.textContent=note.created_at?new Date(note.created_at).toLocaleString("id-ID"):"";
+const actions=document.createElement("div");actions.className="note-actions";
+const edit=document.createElement("button");edit.textContent="✎ Edit";edit.className="secondary";edit.onclick=()=>editNote(note);
+const del=document.createElement("button");del.textContent="✕ Hapus";del.className="danger";del.onclick=()=>deleteNote(note.id);
+actions.append(edit,del);box.append(h,p,date,actions);area.appendChild(box);
 });
-
+}
+async function saveNote(){
+const title=document.getElementById("title").value.trim(),content=document.getElementById("content").value.trim();
+if(!title&&!content)return alert("Catatan masih kosong.");
+let result;
+if(editingId)result=await db.from("notes").update({title,content}).eq("id",editingId);
+else result=await db.from("notes").insert({title,content,user_id:currentUser.id});
+if(result.error)return alert(result.error.message);cancelEdit();loadNotes();
+}
+function editNote(note){editingId=note.id;document.getElementById("title").value=note.title||"";document.getElementById("content").value=note.content||"";window.scrollTo({top:0,behavior:"smooth"});}
+function cancelEdit(){editingId=null;document.getElementById("title").value="";document.getElementById("content").value="";}
+async function deleteNote(id){if(!confirm("Hapus catatan ini?"))return;const {error}=await db.from("notes").delete().eq("id",id);if(error)return alert(error.message);loadNotes();}
+async function deleteAllNotes(){if(!currentUser)return; if(!confirm("Yakin hapus SEMUA catatan milik akunmu? Tindakan ini tidak bisa dibatalkan."))return;const {error}=await db.from("notes").delete().eq("user_id",currentUser.id);if(error)return alert(error.message);loadNotes();}
+async function mergeAllGmail(){
+const {data,error}=await db.from("notes").select("title,content").order("created_at",{ascending:true});if(error)return alert("Gagal mengambil catatan: "+error.message);
+const text=(data||[]).map(n=>(n.title|| "")+"\n"+(n.content||"")).join("\n");
+const matches=text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g)||[];
+const unique=[...new Set(matches.map(e=>e.toLowerCase()))];
+if(!unique.length)return alert("Tidak ditemukan alamat email di catatanmu.");
+document.getElementById("mergedEmails").value=unique.join("\n");
+document.getElementById("mergeCount").textContent="Berhasil menggabungkan "+unique.length+" alamat email unik.";
+document.getElementById("mergeResult").style.display="block";
+document.getElementById("mergeResult").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function clearMergedEmails(){if(!confirm("Hapus hasil gabungan yang tampil?"))return;document.getElementById("mergedEmails").value="";document.getElementById("mergeCount").textContent="Hasil dikosongkan.";document.getElementById("mergeResult").style.display="block";}
+async function copyMergedEmails(){const text=document.getElementById("mergedEmails").value;if(!text)return alert("Belum ada hasil untuk disalin.");try{await navigator.clipboard.writeText(text);alert("Daftar berhasil disalin!");}catch(e){const area=document.getElementById("mergedEmails");area.focus();area.select();alert("Silakan salin teks yang sudah dipilih.");}}
+async function saveMergedNote(){const content=document.getElementById("mergedEmails").value;if(!content)return alert("Hasil gabungan kosong.");const {error}=await db.from("notes").insert({title:"Hasil Gabungan Email",content,user_id:currentUser.id});if(error)return alert(error.message);alert("Hasil disimpan ke catatan.");loadNotes();}
+function showGenerateMode(mode){
+document.getElementById("freeOptions").style.display=mode==="free"?"block":"none";
+document.getElementById("customOptions").style.display=mode==="custom"?"block":"none";
+document.getElementById("freeGenerateButtons").style.display="none";
+document.getElementById("customGenerateButtons").style.display="none";
+document.getElementById("generateAmount").value="";
+document.getElementById("customStatus").textContent="";
+}
+function chooseGenerateAmount(amount){
+document.getElementById("generateAmount").value=amount;
+const free=document.getElementById("freeOptions").style.display==="block";
+document.getElementById("freeGenerateButtons").style.display=free?"block":"none";
+document.getElementById("customGenerateButtons").style.display=free?"none":"block";
+document.getElementById("customStatus").textContent="Jumlah demo dipilih: "+amount;
+}
+function saveCustomSuffix(){const s=document.getElementById("customSuffix").value.trim().replace(/[^a-zA-Z0-9]/g,"");if(!s)return alert("Masukkan akhiran custom!");localStorage.setItem("customSuffix",s);document.getElementById("customSuffix").value=s;alert("Akhiran tersimpan: "+s);}
+function demoAmount(){const n=Number(document.getElementById("generateAmount").value);if(![5,10,15].includes(n)){alert("Pilih jumlah 5, 10, atau 15 terlebih dahulu.");return null;}return n;}
+function makeDemoNames(amount,digits,suffix=""){
+const syllables=["qav","ren","tul","zun","vel","drax","nori","luma","vexa","ravi","qor","zavi","nexa","dori","lavi","varen","xel","runa","tavi","mora","krev","sova","yant","brel","wexi","orva","juni","fex","dalu","rhex"];
+const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.random()*2);for(let i=0;i<parts;i++)u+=syllables[Math.floor(Math.random()*syllables.length)];for(let i=0;i<digits;i++)u+=Math.floor(Math.random()*10);u+=suffix;set.add(u+"@example.com");}return [...set];
+}
+async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" username demo tersimpan di catatan.";loadNotes();}
+async function generateFree(digits){const n=demoAmount();if(n===null)return;const list=makeDemoNames(n,digits);await saveDemoList(list,"Username Demo — "+(digits===0?"tanpa angka":digits+" angka")+" ("+n+")");}
+async function generateCustom(){const n=demoAmount();if(n===null)return;const suffix=localStorage.getItem("customSuffix");if(!suffix)return alert("Simpan akhiran custom terlebih dahulu.");const list=makeDemoNames(n,0,suffix);await saveDemoList(list,"Username Demo Custom — "+suffix+" ("+n+")");}
+document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
+db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
 checkUser();
-  let clickAudioCtx;
-
-document.addEventListener("click", function(e) {
-  if (!e.target.closest("button")) return;
-
-  // Getaran HP
-  if (navigator.vibrate) {
-    navigator.vibrate(30);
-  }
-
-  try {
-    const AudioContextClass =
-      window.AudioContext || window.webkitAudioContext;
-
-    if (!clickAudioCtx) {
-      clickAudioCtx = new AudioContextClass();
-    }
-
-    clickAudioCtx.resume().then(() => {
-      const now = clickAudioCtx.currentTime;
-
-      // Klik tajam
-      const osc = clickAudioCtx.createOscillator();
-      const gain = clickAudioCtx.createGain();
-
-      osc.type = "square";
-      osc.frequency.setValueAtTime(1400, now);
-      osc.frequency.exponentialRampToValueAtTime(350, now + 0.06);
-
-      gain.gain.setValueAtTime(0.35, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-
-      osc.connect(gain);
-      gain.connect(clickAudioCtx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.09);
-
-      // Bass punch
-      const bass = clickAudioCtx.createOscillator();
-      const bassGain = clickAudioCtx.createGain();
-
-      bass.type = "sine";
-      bass.frequency.setValueAtTime(160, now);
-      bass.frequency.exponentialRampToValueAtTime(55, now + 0.1);
-
-      bassGain.gain.setValueAtTime(0.5, now);
-      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-      bass.connect(bassGain);
-      bassGain.connect(clickAudioCtx.destination);
-
-      bass.start(now);
-      bass.stop(now + 0.1);
-    });
-
-  } catch (error) {
-    console.log("Sound error:", error);
-  }
-});
 </script>
-
 </body>
 </html>
