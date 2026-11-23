@@ -166,11 +166,11 @@ function saveCustomSuffix(){const s=document.getElementById("customSuffix").valu
 function demoAmount(){const n=Number(document.getElementById("generateAmount").value);if(![5,10,15].includes(n)){alert("Pilih jumlah 5, 10, atau 15 terlebih dahulu.");return null;}return n;}
 function makeDemoNames(amount,digits,suffix=""){
 const syllables=["qav","ren","tul","zun","vel","drax","nori","luma","vexa","ravi","qor","zavi","nexa","dori","lavi","varen","xel","runa","tavi","mora","krev","sova","yant","brel","wexi","orva","juni","fex","dalu","rhex"];
-const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.random()*2);for(let i=0;i<parts;i++)u+=syllables[Math.floor(Math.random()*syllables.length)];for(let i=0;i<digits;i++)u+=Math.floor(Math.random()*10);u+=suffix;set.add(u+"@example.com");}return [...set];
+const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.random()*2);for(let i=0;i<parts;i++)u+=syllables[Math.floor(Math.random()*syllables.length)];for(let i=0;i<digits;i++)u+=Math.floor(Math.random()*10);u+=suffix;set.add(u+"@gmail.com");}return [...set];
 }
-async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" username demo tersimpan di catatan.";loadNotes();}
-async function generateFree(digits){const n=demoAmount();if(n===null)return;const list=makeDemoNames(n,digits);await saveDemoList(list,"Username Demo — "+(digits===0?"tanpa angka":digits+" angka")+" ("+n+")");}
-async function generateCustom(){const n=demoAmount();if(n===null)return;const suffix=localStorage.getItem("customSuffix");if(!suffix)return alert("Simpan akhiran custom terlebih dahulu.");const list=makeDemoNames(n,0,suffix);await saveDemoList(list,"Username Demo Custom — "+suffix+" ("+n+")");}
+async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" alamat gmail tersimpan di catatan.";loadNotes();}
+async function generateFree(digits){const n=demoAmount();if(n===null)return;const list=makeDemoNames(n,digits);await saveDemoList(list,"Alamat gmail — "+(digits===0?"tanpa angka":digits+" angka")+" ("+n+")");}
+async function generateCustom(){const n=demoAmount();if(n===null)return;const suffix=localStorage.getItem("customSuffix");if(!suffix)return alert("Simpan akhiran custom terlebih dahulu.");const list=makeDemoNames(n,0,suffix);await saveDemoList(list,"Alamat Gmail Costom — "+suffix+" ("+n+")");}
 document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
 db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
 checkUser();
