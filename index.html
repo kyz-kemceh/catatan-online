@@ -878,7 +878,63 @@ async function saveMergedNote() {
 
   loadNotes();
   }
-    async function mergeAllGmail() {
+    
+function saveCustomSuffix() {
+  const suffix = document.getElementById("customSuffix").value
+    .trim()
+    .replace(/[^a-zA-Z0-9]/g, "");
+
+  if (!suffix) return alert("Masukkan akhiran custom!");
+
+  localStorage.setItem("customSuffix", suffix);
+  document.getElementById("customSuffix").value = suffix;
+
+  alert("Custom berhasil disimpan: " + suffix);
+}
+
+async function generateCustom(amount) {
+  if (!currentUser) return alert("Silakan login terlebih dahulu.");
+
+  const suffix = localStorage.getItem("customSuffix");
+
+  if (!suffix) return alert("Simpan custom terlebih dahulu!");
+
+  const chars = "abcdefghijklmnopqrstuvwxyz";
+  const emails = [];
+
+  for (let i = 0; i < amount; i++) {
+    let username = "";
+
+    for (let j = 0; j < 15; j++) {
+      username += chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    emails.push(username + suffix + "@example.com");
+  }
+
+  const content = emails.join("\n");
+
+  const { error } = await db
+    .from("notes")
+    .insert({
+      title: "Generate Custom — " + suffix + " (" + amount + ")",
+      content: content,
+      user_id: currentUser.id
+    });
+
+  if (error) {
+    return alert("Gagal menyimpan: " + error.message);
+  }
+
+  document.getElementById("customStatus").textContent =
+    amount + " username berhasil disimpan ke Catatan Tersimpan.";
+
+  await loadNotes();
+}
+
+document.getElementById("customSuffix").value =
+  localStorage.getItem("customSuffix") || "";
+    
 db.auth.onAuthStateChange((event,session) => {
   currentUser = session?.user || null;
 
