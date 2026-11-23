@@ -955,6 +955,13 @@ db.auth.onAuthStateChange((event,session) => {
 });
 
 checkUser();
+  document.addEventListener("click", function(e) {
+  if (!e.target.closest("button")) return;
+
+  const audio = new Audio(
+    "https://cdn.freesound.org/previews/...
+  );
+});
 </script>
 
 </body>
