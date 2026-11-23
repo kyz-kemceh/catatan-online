@@ -142,21 +142,17 @@ button:active {
       <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
     </div>
 
-    <div id="freeGenerateButtons"
-         style="display:none;margin-top:15px">
+    <div id="freeGenerateButtons" style="display:none;margin-top:15px">
+  <p class="description">Pilih variasi username:</p>
 
-      <p class="description">Variasi:</p>
+  <button class="primary full" onclick="generateFree(12)">
+    ⚡ Pendek (12 Huruf)
+  </button>
 
-      <button class="primary full"
-        onclick="generateFree(0)">Tanpa Angka</button>
-
-      <button class="primary full"
-        onclick="generateFree(2)">2 Angka</button>
-
-      <button class="primary full"
-        onclick="generateFree(3)">3 Angka</button>
+  <button class="primary full" onclick="generateFree(20)">
+    ✨ Panjang (20 Huruf)
+  </button>
     </div>
-  </div>
 
   <div id="customOptions" style="display:none;margin-top:15px">
 
@@ -181,7 +177,23 @@ button:active {
       <button class="primary full"
         onclick="generateCustom()">✨ Generate</button>
     </div>
-  </div>
+ <div id="customGenerateButtons" style="display:none;margin-top:15px">
+  <p class="description">Pilih variasi username:</p>
+
+  <input id="customSuffix" type="text" placeholder="Masukkan akhiran custom">
+
+  <button class="secondary full" onclick="saveCustomSuffix()">
+    💾 Simpan Custom
+  </button>
+
+  <button class="primary full" onclick="generateCustom(12)">
+    ⚡ Pendek (12 Huruf)
+  </button>
+
+  <button class="primary full" onclick="generateCustom(20)">
+    ✨ Panjang (20 Huruf)
+  </button>
+ </div>
 
   <input id="generateAmount" type="hidden" value="">
 
@@ -318,19 +330,58 @@ function saveCustomSuffix(){
   alert("Akhiran tersimpan: " + s);
 }
 function demoAmount(){const n=Number(document.getElementById("generateAmount").value);if(![5,10,15].includes(n)){alert("Pilih jumlah 5, 10, atau 15 terlebih dahulu.");return null;}return n;}
-function makeDemoNames(amount,digits,suffix=""){
+function makeDemoNames(amount, length, suffix = ""){
+  const vowels = "aiueo";
+  const consonants = "bcdfghjklmnpqrstvwxyz";
+
+  function pick(chars){
+    return chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  function makeName(targetLength){
+    let name = "";
+
+    while(name.length < targetLength){
+      name += pick(consonants);
+      if(name.length < targetLength) name += pick(vowels);
+      if(name.length < targetLength && Math.random() > 0.5)
+        name += pick(consonants);
+      if(name.length < targetLength) name += pick(vowels);
+    }
+
+    return name.slice(0, targetLength);
+  }
+
+  const set = new Set();
+
+  while(set.size < amount){
+    const baseLength = Math.max(1, length - suffix.length);
+    const username = makeName(baseLength) + suffix;
+    set.add(username);
+  }
+
+  return [...set];
+  }
+const syllables = [];
+
 const syllables = [];
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
+const vowels = "aiueo";
+const consonants = "bcdfghjklmnpqrstvwxyz";
 
-// Kombinasi 2 huruf
+function randomChar(chars){
+  return chars[Math.floor(Math.random() * chars.length)];
+}
+
+// 2 huruf: 26 × 26 = 676
 for(let i = 0; i < 26; i++){
   for(let j = 0; j < 26; j++){
     syllables.push(alphabet[i] + alphabet[j]);
   }
 }
 
-// Kombinasi 3 huruf
+// 3 huruf: 17.576
 for(let i = 0; i < 26; i++){
   for(let j = 0; j < 26; j++){
     for(let k = 0; k < 26; k++){
@@ -339,7 +390,7 @@ for(let i = 0; i < 26; i++){
   }
 }
 
-// Kombinasi 4 huruf
+// 4 huruf: 456.976
 for(let i = 0; i < 26; i++){
   for(let j = 0; j < 26; j++){
     for(let k = 0; k < 26; k++){
@@ -354,21 +405,37 @@ for(let i = 0; i < 26; i++){
 const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.random()*2);for(let i=0;i<parts;i++)u+=syllables[Math.floor(Math.random()*syllables.length)];for(let i=0;i<digits;i++)u+=Math.floor(Math.random()*10);u+=suffix;set.add(u+"@gmail.com");}return [...set];
 }
 async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" alamat gmail tersimpan di catatan.";loadNotes();}
-async function generateFree(digits){const n=demoAmount();if(n===null)return;const list=makeDemoNames(n,digits);await saveDemoList(list,"Alamat gmail — "+(digits===0?"tanpa angka":digits+" angka")+" ("+n+")");}
-function generateCustom(){
+async function generateFree(length){
   const n = demoAmount();
   if(n === null) return;
 
-  const suffix = document.getElementById("customSuffix").value
-    .trim()
-    .replace(/[^a-zA-Z0-9]/g, "");
+  const list = makeDemoNames(n, length);
+
+  await saveDemoList(
+    list,
+    "Username contoh — " + length + " huruf (" + n + ")"
+  );
+}
+
+async function generateCustom(length){
+  const n = demoAmount();
+  if(n === null) return;
+
+  const suffix = document.getElementById("customSuffix")
+    .value.trim().replace(/[^a-zA-Z0-9]/g, "");
 
   if(!suffix) return alert("Masukkan akhiran custom!");
 
-  const list = makeDemoNames(n, 0, suffix);
+  if(suffix.length >= length)
+    return alert("Akhiran terlalu panjang untuk variasi ini!");
 
-  saveDemoList(list, "Username Custom (" + n + ")");
-}
+  const list = makeDemoNames(n, length, suffix);
+
+  await saveDemoList(
+    list,
+    "Username custom — " + suffix + " (" + n + ")"
+  );
+  }
 document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
 db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
 checkUser();
