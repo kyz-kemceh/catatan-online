@@ -319,6 +319,21 @@ button:active {
     font-size: 11px;
   }
 }
+  
+.merge-card {
+  border: 1px solid #6366f155;
+  background:
+    radial-gradient(circle at top right,#312e8150,transparent 60%),
+    linear-gradient(145deg,#111827,#0c1220);
+}
+
+#mergedEmails {
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  border-color: #6366f155;
+  }
+  
 </style>
 </head>
 
@@ -738,6 +753,91 @@ async function deleteNote(id) {
   loadNotes();
 }
 
+async function mergeAllGmail() {
+  const {data,error} = await db
+    .from("notes")
+    .select("title,content")
+    .order("created_at",{ascending:true});
+
+  if(error) {
+    return alert("Gagal mengambil catatan: " + error.message);
+  }
+
+  const allText = data
+    .map(note => (note.title || "") + "\n" + (note.content || ""))
+    .join("\n");
+
+  const matches = allText.match(
+    /[a-zA-Z0-9._%+-]+@gmail\.com/gi
+  ) || [];
+
+  const uniqueEmails = [...new Set(
+    matches.map(email => email.toLowerCase())
+  )];
+
+  if(uniqueEmails.length === 0) {
+    return alert("Tidak ditemukan Gmail di catatanmu.");
+  }
+
+  document.getElementById("mergedEmails").value =
+    uniqueEmails.join("\n");
+
+  document.getElementById("mergeCount").textContent =
+    "Berhasil menggabungkan " +
+    uniqueEmails.length +
+    " Gmail unik.";
+
+  document.getElementById("mergeResult").style.display = "block";
+
+  document.getElementById("mergeResult").scrollIntoView({
+    behavior:"smooth",
+    block:"nearest"
+  });
+}
+
+async function copyMergedEmails() {
+  const text = document.getElementById("mergedEmails").value;
+
+  if(!text) return alert("Belum ada Gmail untuk disalin.");
+
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("Semua Gmail berhasil disalin!");
+  } catch(error) {
+    const area = document.getElementById("mergedEmails");
+    area.focus();
+    area.select();
+
+    const success = document.execCommand("copy");
+
+    if(success) {
+      alert("Semua Gmail berhasil disalin!");
+    } else {
+      alert("Tekan lama teks lalu pilih Salin.");
+    }
+  }
+}
+
+async function saveMergedNote() {
+  const content = document.getElementById("mergedEmails").value;
+
+  if(!content) return alert("Belum ada hasil Gmail.");
+
+  const {error} = await db
+    .from("notes")
+    .insert({
+      title:"Gabungan Gmail",
+      content:content,
+      user_id:currentUser.id
+    });
+
+  if(error) return alert("Gagal menyimpan: " + error.message);
+
+  alert("Gabungan Gmail berhasil disimpan menjadi catatan baru!");
+
+  loadNotes();
+  }
+    
 db.auth.onAuthStateChange((event,session) => {
   currentUser = session?.user || null;
 
