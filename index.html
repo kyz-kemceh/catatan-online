@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CatatanKu — Jack</title>
+<title>Salin Tempel Gmail — Jack</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -329,9 +329,8 @@ button:active {
     <div class="brand">
       <div class="logo">✦</div>
       <div>
-        <h1>CatatanKu</h1>
-        <div class="subtitle">Your personal digital space</div>
-      </div>
+        <h1>Salin Tempel Gmail</h1>
+<div class="subtitle">Your personal Gmail organizer</div>
     </div>
 
     <div class="creator">
@@ -425,9 +424,34 @@ button:active {
     </button>
   </div>
 
-  <h2 style="font-size:18px;margin:25px 5px 5px">
-    Catatan Tersimpan
-  </h2>
+  
+<div class="card merge-card">
+  <h2 class="section-title">📧 Gabungkan Semua Gmail</h2>
+  <p class="description">
+    Satukan semua Gmail dari seluruh catatanmu menjadi satu daftar.
+  </p>
+
+  <button class="primary full" onclick="mergeAllGmail()">
+    ✦ Gabungkan Semua Gmail
+  </button>
+
+  <div id="mergeResult" style="display:none;margin-top:15px">
+    <div id="mergeCount" class="description"></div>
+
+    <textarea id="mergedEmails" readonly
+      placeholder="Hasil gabungan Gmail akan muncul di sini..."
+      style="min-height:220px"></textarea>
+
+    <button class="primary full" onclick="copyMergedEmails()">
+      📋 Salin Semua Gmail
+    </button>
+
+    <button class="secondary full" onclick="saveMergedNote()">
+      💾 Simpan sebagai Catatan Baru
+    </button>
+  </div>
+</div>
+
 
   <p class="description" style="margin-left:5px">
     Semua catatan pribadimu.
