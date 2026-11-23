@@ -220,6 +220,8 @@ document.getElementById("login").style.display=currentUser||recoveryMode?"none":
 document.getElementById("signupBox").style.display="none";
 document.getElementById("resetBox").style.display=recoveryMode?"block":"none";
 document.getElementById("app").style.display=currentUser&&!recoveryMode?"block":"none";
+document.querySelector("header").style.display =
+  currentUser && !recoveryMode ? "flex" : "none";
 if(currentUser&&!recoveryMode)loadNotes();
 }
 function showSignup(){document.getElementById("login").style.display="none";document.getElementById("signupBox").style.display="block";}
