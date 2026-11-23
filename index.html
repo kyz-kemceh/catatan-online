@@ -295,30 +295,24 @@ function makeDemoNames(amount, length, suffix = ""){
     return chars[Math.floor(Math.random() * chars.length)];
   }
 
-  function makeName(targetLength){
+  function makeName(len){
     let name = "";
-
-    while(name.length < targetLength){
+    while(name.length < len){
       name += pick(consonants);
-      if(name.length < targetLength) name += pick(vowels);
-      if(name.length < targetLength && Math.random() > 0.5)
-        name += pick(consonants);
-      if(name.length < targetLength) name += pick(vowels);
+      if(name.length < len) name += pick(vowels);
     }
-
-    return name.slice(0, targetLength);
+    return name.slice(0, len);
   }
 
   const set = new Set();
 
   while(set.size < amount){
-    const baseLength = Math.max(1, length - suffix.length);
-    const username = makeName(baseLength) + suffix;
-    set.add(username);
+    const username = makeName(length - suffix.length) + suffix;
+    set.add(username + "@example.com");
   }
 
   return [...set];
-  }
+}
 
 const syllables = [];
 
