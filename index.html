@@ -166,12 +166,20 @@ function clearMergedEmails(){if(!confirm("Hapus hasil gabungan yang tampil?"))re
 async function copyMergedEmails(){const text=document.getElementById("mergedEmails").value;if(!text)return alert("Belum ada hasil untuk disalin.");try{await navigator.clipboard.writeText(text);alert("Daftar berhasil disalin!");}catch(e){const area=document.getElementById("mergedEmails");area.focus();area.select();alert("Silakan salin teks yang sudah dipilih.");}}
 async function saveMergedNote(){const content=document.getElementById("mergedEmails").value;if(!content)return alert("Hasil gabungan kosong.");const {error}=await db.from("notes").insert({title:"Hasil Gabungan Email",content,user_id:currentUser.id});if(error)return alert(error.message);alert("Hasil disimpan ke catatan.");loadNotes();}
 function showGenerateMode(mode){
-document.getElementById("freeOptions").style.display=mode==="free"?"block":"none";
-document.getElementById("customOptions").style.display=mode==="custom"?"block":"none";
-document.getElementById("freeGenerateButtons").style.display="none";
-document.getElementById("customGenerateButtons").style.display="none";
-document.getElementById("generateAmount").value="";
-document.getElementById("customStatus").textContent="";
+  document.getElementById("freeOptions").style.display =
+    mode === "free" ? "block" : "none";
+
+  document.getElementById("customOptions").style.display =
+    mode === "custom" ? "block" : "none";
+
+  document.getElementById("freeGenerateButtons").style.display = "none";
+  document.getElementById("customGenerateButtons").style.display = "none";
+
+  document.getElementById("generateAmount").value = "";
+  document.getElementById("customStatus").textContent = "";
+
+  document.getElementById("modeFree").classList.toggle("active", mode === "free");
+  document.getElementById("modeCustom").classList.toggle("active", mode === "custom");
 }
 function chooseGenerateAmount(amount){
 document.getElementById("generateAmount").value=amount;
