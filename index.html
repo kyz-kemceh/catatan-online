@@ -955,48 +955,44 @@ db.auth.onAuthStateChange((event,session) => {
 });
 
 checkUser();
-  let clickAudio;
+  let clickAudioCtx;
 
-document.addEventListener("click", function(event) {
-  if (!event.target.closest("button")) return;
+document.addEventListener("click", function(e) {
+  if (!e.target.closest("button")) return;
 
   try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
 
-    if (!clickAudio) {
-      clickAudio = new AudioCtx();
+    if (!AudioContextClass) return;
+
+    if (!clickAudioCtx) {
+      clickAudioCtx = new AudioContextClass();
     }
 
-    if (clickAudio.state === "suspended") {
-      clickAudio.resume();
-    }
+    clickAudioCtx.resume().then(() => {
+      const oscillator = clickAudioCtx.createOscillator();
+      const volume = clickAudioCtx.createGain();
 
-    const osc = clickAudio.createOscillator();
-    const gain = clickAudio.createGain();
+      oscillator.type = "triangle";
+      oscillator.frequency.value = 900;
 
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(700, clickAudio.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(
-      450,
-      clickAudio.currentTime + 0.04
-    );
+      volume.gain.setValueAtTime(0.12, clickAudioCtx.currentTime);
+      volume.gain.exponentialRampToValueAtTime(
+        0.001,
+        clickAudioCtx.currentTime + 0.08
+      );
 
-    gain.gain.setValueAtTime(0.0001, clickAudio.currentTime);
-    gain.gain.exponentialRampToValueAtTime(
-      0.06,
-      clickAudio.currentTime + 0.005
-    );
-    gain.gain.exponentialRampToValueAtTime(
-      0.0001,
-      clickAudio.currentTime + 0.06
-    );
+      oscillator.connect(volume);
+      volume.connect(clickAudioCtx.destination);
 
-    osc.connect(gain);
-    gain.connect(clickAudio.destination);
+      oscillator.start();
+      oscillator.stop(clickAudioCtx.currentTime + 0.08);
+    });
 
-    osc.start();
-    osc.stop(clickAudio.currentTime + 0.07);
-  } catch (e) {}
+  } catch (error) {
+    console.log("Sound error:", error);
+  }
 });
 </script>
 
