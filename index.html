@@ -439,7 +439,36 @@ button:active {
     </button>
   </div>
 
-  
+  <div class="card merge-card">
+  <h2 class="section-title">⚙️ Generate Custom</h2>
+
+  <p class="description">
+    Generate username testing dengan akhiran custom.
+  </p>
+
+  <input
+    id="customSuffix"
+    type="text"
+    placeholder="Masukkan akhiran, contoh: jezz"
+  >
+
+  <button class="primary full" onclick="saveCustomSuffix()">
+    💾 Simpan Custom
+  </button>
+
+  <div style="margin-top:15px">
+    <p class="description">Pilih jumlah generate:</p>
+
+    <div style="display:flex;gap:10px">
+      <button class="primary" onclick="generateCustom(5)">5</button>
+      <button class="primary" onclick="generateCustom(10)">10</button>
+      <button class="primary" onclick="generateCustom(15)">15</button>
+    </div>
+  </div>
+
+  <div id="customStatus" class="description"
+       style="margin-top:12px"></div>
+  </div>
 <div class="card merge-card">
   <h2 class="section-title">📧 Gabungkan Semua Gmail</h2>
   <p class="description">
