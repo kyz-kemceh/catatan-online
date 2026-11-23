@@ -314,28 +314,6 @@ function makeDemoNames(amount, length, suffix = ""){
   return [...set];
 }
 
-const syllables = [];
-const alphabet = "abcdefghijklmnopqrstuvwxyz";
-
-// Kombinasi 2 huruf: 676
-for(let i = 0; i < 26; i++){
-  for(let j = 0; j < 26; j++){
-    syllables.push(alphabet[i] + alphabet[j]);
-  }
-}
-
-// Kombinasi 3 huruf: 17.576
-for(let i = 0; i < 26; i++){
-  for(let j = 0; j < 26; j++){
-    for(let k = 0; k < 26; k++){
-      syllables.push(
-        alphabet[i] + alphabet[j] + alphabet[k]
-      );
-    }
-  }
-}
-const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.random()*2);for(let i=0;i<parts;i++)u+=syllables[Math.floor(Math.random()*syllables.length)];for(let i=0;i<digits;i++)u+=Math.floor(Math.random()*10);u+=suffix;set.add(u+"@gmail.com");}return [...set];
-}
 async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" alamat gmail tersimpan di catatan.";loadNotes();}
 async function generateFree(length){
   const n = demoAmount();
@@ -370,7 +348,6 @@ async function generateCustom(length){
   }
 document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
 db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
-checkUser();
   // SOUND EFFECT KLIK
 let clickAudioCtx;
 
