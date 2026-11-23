@@ -775,16 +775,22 @@ function escapeHTML(value) {
   </div>
     </div>
     <script>
-      const simItems = document.getElementById("simItems");
+      document.addEventListener("DOMContentLoaded", function() {
+  const simItems = document.getElementById("simItems");
+  const simCount = document.getElementById("simCount");
 
-simItems.addEventListener("input", function() {
-  const total = this.value
-    .split("\n")
-    .map(x => x.trim())
-    .filter(x => x.length > 0).length;
+  if (!simItems || !simCount) {
+    console.log("Elemen simItems atau simCount tidak ditemukan");
+    return;
+  }
 
-  document.getElementById("simCount").textContent =
-    "Jumlah data: " + total;
+  simItems.addEventListener("input", function() {
+    const total = this.value
+      .split("\n")
+      .filter(x => x.trim() !== "").length;
+
+    simCount.textContent = "Jumlah data: " + total;
+  });
 });
 
 function simSave() {
