@@ -325,7 +325,20 @@ const set=new Set();while(set.size<amount){let u="";let parts=3+Math.floor(Math.
 }
 async function saveDemoList(list,title){if(!currentUser)return alert("Silakan login.");const {error}=await db.from("notes").insert({title,content:list.join("\n"),user_id:currentUser.id});if(error)return alert("Gagal menyimpan: "+error.message);document.getElementById("customStatus").textContent=list.length+" alamat gmail tersimpan di catatan.";loadNotes();}
 async function generateFree(digits){const n=demoAmount();if(n===null)return;const list=makeDemoNames(n,digits);await saveDemoList(list,"Alamat gmail — "+(digits===0?"tanpa angka":digits+" angka")+" ("+n+")");}
-async function generateCustom(){const n=demoAmount();if(n===null)return;const suffix=localStorage.getItem("customSuffix");if(!suffix)return alert("Simpan akhiran custom terlebih dahulu.");const list=makeDemoNames(n,0,suffix);await saveDemoList(list,"Alamat Gmail Costom — "+suffix+" ("+n+")");}
+function generateCustom(){
+  const n = demoAmount();
+  if(n === null) return;
+
+  const suffix = document.getElementById("customSuffix").value
+    .trim()
+    .replace(/[^a-zA-Z0-9]/g, "");
+
+  if(!suffix) return alert("Masukkan akhiran custom!");
+
+  const list = makeDemoNames(n, 0, suffix);
+
+  saveDemoList(list, "Username Custom (" + n + ")");
+}
 document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
 db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){recoveryMode=true;currentUser=session?.user||null;showPage();}});
 checkUser();
