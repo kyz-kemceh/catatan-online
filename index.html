@@ -142,8 +142,44 @@ button:active {
 
 </div>
 <body>
-<header><div class="header-inner"><div class="brand"><div class="logo">✦</div><div><h1>Jack Gmail Tools</h1><div class="subtitle">Your personal notes organizer</div></div></div><div class="creator"><small>CREATED BY</small><strong>✦ JACK ✦</strong></div></div></header>
-<main>
+<header>
+  <div class="header-inner">
+
+    <div class="brand">
+      <div class="logo">✦</div>
+      <div>
+        <h1>Jack Gmail Tools</h1>
+        <div class="subtitle">Your personal notes organizer</div>
+      </div>
+    </div>
+
+    <div class="creator">
+      <small>CREATED BY</small>
+      <strong>✦ JACK ✦</strong>
+    </div>
+
+    <button
+      id="adminButtonBox"
+      onclick="openAdminPage()"
+      title="Admin"
+      style="
+        width:32px;
+        height:32px;
+        min-width:32px;
+        padding:0;
+        margin-left:8px;
+        border-radius:10px;
+        background:#27213f;
+        color:#c4b5fd;
+        border:1px solid #7c3aed;
+        font-size:16px;
+      ">
+      ♛
+    </button>
+
+  </div>
+</header>
+  </main>
 <div id="status">Memuat...</div>
 <div id="login" class="card">
 <h2 class="section-title">Selamat datang ✨</h2><p class="description">Masuk ke ruang catatan pribadimu.</p>
