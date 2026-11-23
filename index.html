@@ -726,140 +726,130 @@ initAdminButton();
 <input
   id="adminName"
   type="text"
-  placeholder="Nama penyetor"
->
 
-<textarea
-  id="adminListInput"
-  rows="6"
-  placeholder="Masukkan data simulasi, satu data per baris..."
-></textarea>
+<!-- HALAMAN ADMIN -->
+<div id="adminPage" style="display:none;padding:15px">
+  <div class="card">
 
-<div id="adminCountPreview">
-  Jumlah data: 0
-</div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h2>♛ Admin Panel</h2>
+      <button onclick="closeAdminPage()" style="width:40px">←</button>
+    </div>
 
-<button class="full" onclick="saveSimulationData()">
-  + Simpan Data Simulasi
-</button>
+    <p class="description">Ruang administrasi pribadi</p>
+    <hr>
+
+    <h3>Tambah Data Simulasi</h3>
+
+    <input
+      id="adminName"
+      type="text"
+      placeholder="Nama pencatat"
+    >
+
+    <textarea
+      id="adminListInput"
+      rows="6"
+      placeholder="Masukkan ID TEST, satu data per baris..."
+    ></textarea>
+
+    <div id="adminCountPreview">Jumlah data: 0</div>
+
+    <button class="full" onclick="saveSimulationData()">
+      + Simpan Data Simulasi
+    </button>
 
     <div id="adminList"></div>
 
   </div>
-
 </div>
-  <script>
-function escapeHTML(value) {
+
+<script>
+const adminInput = document.getElementById("adminListInput");
+
+adminInput.addEventListener("input", function() {
+  const total = this.value
+    .split("\n")
+    .filter(x => x.trim() !== "").length;
+
+  document.getElementById("adminCountPreview").textContent =
+    "Jumlah data: " + total;
+});
+
+function escapeSimulationHTML(value) {
   const div = document.createElement("div");
   div.textContent = value;
   return div.innerHTML;
 }
-  </script>
-    <div id="simulationAdmin" style="display:none;padding:15px">
-  <div class="card">
-    <h2>♛ Administrasi</h2>
-    <p class="description">Pencatatan data simulasi pribadi</p>
 
-    <input id="simName" placeholder="Nama penyetor">
+function saveSimulationData() {
+  const name = document.getElementById("adminName").value.trim();
 
-    <textarea id="simItems"
-      placeholder="Masukkan ID simulasi, satu per baris"></textarea>
-
-    <div id="simCount">Jumlah data: 0</div>
-
-    <button class="primary full" onclick="simSave()">
-      + Simpan Data
-    </button>
-
-    <div id="simRecords"></div>
-  </div>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-  const simItems = document.getElementById("simItems");
-  const simCount = document.getElementById("simCount");
-
-  if (!simItems || !simCount) {
-    console.log("Elemen simItems atau simCount tidak ditemukan");
-    return;
-  }
-
-  simItems.addEventListener("input", function() {
-    const total = this.value
-      .split("\n")
-      .filter(x => x.trim() !== "").length;
-
-    simCount.textContent = "Jumlah data: " + total;
-  });
-});
-
-function simSave() {
-  const name = document.getElementById("simName").value.trim();
-  const items = simItems.value
+  const items = adminInput.value
     .split("\n")
     .map(x => x.trim())
     .filter(x => x.length > 0);
 
   if (!name || items.length === 0) {
-    alert("Nama dan data simulasi wajib diisi!");
+    alert("Nama dan data wajib diisi!");
+    return;
+  }
+
+  if (!items.every(x => /^TEST-\d+$/i.test(x))) {
+    alert("Gunakan ID simulasi TEST, contoh TEST-001!");
     return;
   }
 
   const records = JSON.parse(
-    localStorage.getItem("simRecords") || "[]"
+    localStorage.getItem("simulationRecords") || "[]"
   );
 
   records.push({
     id: Date.now(),
-    name,
-    items,
+    name: name,
+    items: items,
     total: items.length
   });
 
-  localStorage.setItem("simRecords", JSON.stringify(records));
+  localStorage.setItem("simulationRecords", JSON.stringify(records));
 
-  document.getElementById("simName").value = "";
-  simItems.value = "";
-  document.getElementById("simCount").textContent = "Jumlah data: 0";
+  document.getElementById("adminName").value = "";
+  adminInput.value = "";
+  document.getElementById("adminCountPreview").textContent =
+    "Jumlah data: 0";
 
-  simRender();
+  renderSimulationData();
   alert("Data simulasi berhasil disimpan!");
 }
 
-function simRender() {
+function renderSimulationData() {
   const records = JSON.parse(
-    localStorage.getItem("simRecords") || "[]"
+    localStorage.getItem("simulationRecords") || "[]"
   );
 
-  document.getElementById("simRecords").innerHTML =
+  document.getElementById("adminList").innerHTML =
     records.map(r => `
       <div class="card">
-        <h3>${simEscape(r.name)}</h3>
-        <p>Jumlah: ${r.total}</p>
+        <h3>${escapeSimulationHTML(r.name)}</h3>
+        <p>Jumlah data: ${r.total}</p>
         <button class="danger"
-          onclick="simDelete(${r.id})">
+          onclick="deleteSimulationData(${r.id})">
           Hapus Data
         </button>
       </div>
     `).join("");
 }
 
-function simDelete(id) {
+function deleteSimulationData(id) {
   if (!confirm("Hapus data simulasi ini?")) return;
 
   const records = JSON.parse(
-    localStorage.getItem("simRecords") || "[]"
+    localStorage.getItem("simulationRecords") || "[]"
   ).filter(r => r.id !== id);
 
-  localStorage.setItem("simRecords", JSON.stringify(records));
-  simRender();
+  localStorage.setItem("simulationRecords", JSON.stringify(records));
+  renderSimulationData();
 }
-
-function simEscape(value) {
-  const div = document.createElement("div");
-  div.textContent = value;
-  return div.innerHTML;
-}
-  </script>
+</script>
 </body>
-</html>
+  </html>
