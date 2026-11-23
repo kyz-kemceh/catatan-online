@@ -1,82 +1,448 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CatatanKu</title>
+<title>CatatanKu — Jack</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f4f5f8;color:#20232a;font-family:Arial,sans-serif}
-header{padding:22px;background:#fff;border-bottom:1px solid #eee}
-h1{margin:0;font-size:24px}
-small{color:#777}
-main{max-width:650px;margin:auto;padding:18px}
-.card{background:white;border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 3px 15px #00000008}
-input,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:16px;margin:7px 0}
-textarea{min-height:130px;resize:vertical}
-button{border:0;border-radius:10px;padding:12px 16px;background:#242b42;color:white;font-size:15px;margin:4px;cursor:pointer}
-.secondary{background:#e9ebf2;color:#222}
-.danger{background:#ffe7e7;color:#a22}
-.note{white-space:pre-wrap;overflow-wrap:anywhere}
-#app,#resetBox,#signupBox{display:none}
-#status{padding:12px;color:#555}
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #080b14;
+  --card: #111827;
+  --border: rgba(255,255,255,.08);
+  --blue: #60a5fa;
+  --purple: #a78bfa;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 0%, #172554 0, transparent 35%),
+    radial-gradient(circle at 90% 20%, #2e1065 0, transparent 30%),
+    var(--bg);
+  color: var(--text);
+  font-family: system-ui, Arial, sans-serif;
+}
+
+header {
+  padding: 22px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,11,20,.7);
+  backdrop-filter: blur(15px);
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  box-shadow: 0 0 25px #6366f155;
+}
+
+h1 {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: -.5px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.creator {
+  text-align: right;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
+
+.creator small {
+  display: block;
+  color: #64748b;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.creator strong {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg,var(--blue),var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+main {
+  max-width: 720px;
+  margin: auto;
+  padding: 28px 16px 60px;
+}
+
+#status {
+  text-align: center;
+  color: var(--muted);
+  padding: 20px;
+}
+
+.card {
+  background: linear-gradient(
+    145deg,
+    rgba(22,30,48,.95),
+    rgba(13,18,31,.95)
+  );
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 12px 40px #00000025;
+  animation: appear .35s ease;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card h2,
+.card h3 {
+  margin-top: 0;
+}
+
+.section-title {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+input, textarea {
+  width: 100%;
+  background: #080d19;
+  color: white;
+  border: 1px solid #263247;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 7px 0;
+  font-size: 15px;
+  outline: none;
+  transition: .2s;
+}
+
+input:focus, textarea:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px #6366f122;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 5px 3px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:active {
+  transform: scale(.97);
+}
+
+.primary {
+  color: white;
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  box-shadow: 0 4px 18px #4f46e544;
+}
+
+.primary:hover {
+  box-shadow: 0 4px 25px #6366f177;
+  transform: translateY(-1px);
+}
+
+.secondary {
+  color: #cbd5e1;
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+.secondary:hover {
+  background: #29364b;
+}
+
+.danger {
+  color: #fca5a5;
+  background: #3b171f;
+  border: 1px solid #7f1d1d55;
+}
+
+.danger:hover {
+  background: #501c27;
+}
+
+.full {
+  width: 100%;
+  margin: 8px 0;
+}
+
+#app, #resetBox, #signupBox {
+  display: none;
+}
+
+#notes {
+  margin-top: 24px;
+}
+
+.note-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.note-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg,#3b82f6,#8b5cf6,transparent);
+}
+
+.note-title {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.note {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin: 12px 0;
+}
+
+.note-date {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.note-actions {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.empty {
+  text-align: center;
+  color: #64748b;
+  padding: 30px 10px;
+}
+
+.footer {
+  text-align: center;
+  padding-top: 30px;
+  color: #475569;
+  font-size: 12px;
+}
+
+.footer span {
+  color: #818cf8;
+}
+
+@media(max-width:480px) {
+  header {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  .logo {
+    width: 38px;
+    height: 38px;
+  }
+
+  main {
+    padding: 20px 12px 40px;
+  }
+
+  .card {
+    padding: 17px;
+    border-radius: 17px;
+  }
+
+  .creator strong {
+    font-size: 11px;
+  }
+}
 </style>
 </head>
+
 <body>
 
-<header class="main-header">
-  <div class="brand">
-    <h1>📝 CatatanKu</h1>
-    <small>Catatan tersimpan online</small>
-  </div>
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo">✦</div>
+      <div>
+        <h1>CatatanKu</h1>
+        <div class="subtitle">Your personal digital space</div>
+      </div>
+    </div>
 
-  <div class="creator">
-    <span class="creator-line"></span>
-    <span class="creator-text">CREATED BY</span>
-    <span class="creator-name">JACK</span>
-    <span class="creator-symbol">✦</span>
+    <div class="creator">
+      <small>CREATED BY</small>
+      <strong>✦ JACK ✦</strong>
+    </div>
   </div>
 </header>
 
 <main>
+
 <div id="status">Memuat...</div>
 
-<div id="login" class="card" style="display:none">
-<h3>Login Akun</h3>
-<input id="email" type="email" placeholder="Gmail">
-<input id="password" type="password" placeholder="Password">
-<button onclick="login()">Masuk</button>
-<button class="secondary" onclick="showSignup()">Daftar Akun Baru</button>
-<button class="secondary" onclick="sendPasswordReset()">Lupa Password?</button>
+<!-- LOGIN -->
+<div id="login" class="card">
+  <h2 class="section-title">Selamat datang ✨</h2>
+  <p class="description">
+    Masuk ke ruang catatan pribadimu.
+  </p>
+
+  <input id="email" type="email" placeholder="Alamat Gmail">
+  <input id="password" type="password" placeholder="Password">
+
+  <button class="primary full" onclick="login()">
+    Masuk ke Akun →
+  </button>
+
+  <button class="secondary full" onclick="showSignup()">
+    ✦ Buat Akun Baru
+  </button>
+
+  <button class="secondary full" onclick="sendPasswordReset()">
+    Lupa Password?
+  </button>
 </div>
 
+<!-- REGISTER -->
 <div id="signupBox" class="card">
-<h3>Daftar Akun Baru</h3>
-<input id="signupEmail" type="email" placeholder="Gmail kamu">
-<input id="signupPassword" type="password" placeholder="Buat password">
-<input id="signupConfirm" type="password" placeholder="Ulangi password">
-<button onclick="signup()">Daftar Sekarang</button>
-<button class="secondary" onclick="showLogin()">Kembali ke Login</button>
+  <h2 class="section-title">Buat akun baru ✦</h2>
+  <p class="description">
+    Buat ruang pribadi untuk menyimpan pikiranmu.
+  </p>
+
+  <input id="signupEmail" type="email" placeholder="Gmail kamu">
+  <input id="signupPassword" type="password" placeholder="Buat password">
+  <input id="signupConfirm" type="password" placeholder="Ulangi password">
+
+  <button class="primary full" onclick="signup()">
+    Daftar Sekarang →
+  </button>
+
+  <button class="secondary full" onclick="showLogin()">
+    ← Kembali ke Login
+  </button>
 </div>
 
+<!-- RESET PASSWORD -->
 <div id="resetBox" class="card">
-<h3>Ubah Password</h3>
-<p>Masukkan password baru kamu.</p>
-<input id="newPassword" type="password" placeholder="Password baru">
-<input id="confirmNewPassword" type="password" placeholder="Ulangi password baru">
-<button onclick="saveNewPassword()">Simpan Password Baru</button>
+  <h2 class="section-title">Password Baru 🔐</h2>
+  <p class="description">
+    Buat password baru untuk akunmu.
+  </p>
+
+  <input id="newPassword" type="password" placeholder="Password baru">
+  <input id="confirmNewPassword" type="password" placeholder="Ulangi password baru">
+
+  <button class="primary full" onclick="saveNewPassword()">
+    Simpan Password Baru
+  </button>
 </div>
 
+<!-- APP -->
 <div id="app">
-<div class="card">
-<input id="title" placeholder="Judul catatan">
-<textarea id="content" placeholder="Tulis catatan di sini..."></textarea>
-<button onclick="saveNote()">Simpan Catatan</button>
-<button class="secondary" onclick="cancelEdit()">Batal Edit</button>
+
+  <div class="card">
+    <h2 class="section-title">✦ Tulis sesuatu</h2>
+    <p class="description">
+      Simpan ide, cerita, atau hal yang ingin kamu ingat.
+    </p>
+
+    <input id="title" placeholder="Judul catatan">
+
+    <textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea>
+
+    <button class="primary" onclick="saveNote()">
+      ✦ Simpan Catatan
+    </button>
+
+    <button class="secondary" onclick="cancelEdit()">
+      Batal
+    </button>
+  </div>
+
+  <h2 style="font-size:18px;margin:25px 5px 5px">
+    Catatan Tersimpan
+  </h2>
+
+  <p class="description" style="margin-left:5px">
+    Semua catatan pribadimu.
+  </p>
+
+  <div id="notes"></div>
+
+  <button class="danger full" onclick="logout()">
+    Keluar dari Akun
+  </button>
+
 </div>
-<div id="notes"></div>
-<button class="secondary" onclick="logout()">Keluar Akun</button>
+
+<div class="footer">
+  Designed with <span>✦</span> by Jack
 </div>
 
 </main>
@@ -91,13 +457,13 @@ let currentUser = null;
 let editingId = null;
 let recoveryMode = false;
 
-async function checkUser(){
+async function checkUser() {
   const {data:{session}} = await db.auth.getSession();
   currentUser = session?.user || null;
   showPage();
 }
 
-function showPage(){
+function showPage() {
   document.getElementById("status").style.display =
     currentUser || recoveryMode ? "none" : "block";
 
@@ -117,17 +483,17 @@ function showPage(){
   if(currentUser && !recoveryMode) loadNotes();
 }
 
-function showSignup(){
+function showSignup() {
   document.getElementById("login").style.display = "none";
   document.getElementById("signupBox").style.display = "block";
 }
 
-function showLogin(){
+function showLogin() {
   document.getElementById("signupBox").style.display = "none";
   document.getElementById("login").style.display = "block";
 }
 
-async function signup(){
+async function signup() {
   const email = document.getElementById("signupEmail").value.trim();
   const password = document.getElementById("signupPassword").value;
   const confirm = document.getElementById("signupConfirm").value;
@@ -151,24 +517,28 @@ async function signup(){
 
   if(error) return alert(error.message);
 
-  if(data.session){
+  if(data.session) {
     currentUser = data.user;
     alert("Pendaftaran berhasil!");
     showPage();
-  }else{
-    alert("Pendaftaran berhasil. Silakan periksa Gmail kamu untuk konfirmasi akun.");
+  } else {
+    alert("Pendaftaran berhasil. Silakan login.");
     document.getElementById("signupPassword").value = "";
     document.getElementById("signupConfirm").value = "";
     showLogin();
   }
 }
 
-async function login(){
+async function login() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
+  if(!email || !password)
+    return alert("Isi Gmail dan password terlebih dahulu.");
+
   const {data,error} = await db.auth.signInWithPassword({
-    email,password
+    email,
+    password
   });
 
   if(error) return alert(error.message);
@@ -177,10 +547,11 @@ async function login(){
   showPage();
 }
 
-async function sendPasswordReset(){
+async function sendPasswordReset() {
   const email = document.getElementById("email").value.trim();
 
-  if(!email) return alert("Masukkan Gmail akun terlebih dahulu.");
+  if(!email)
+    return alert("Masukkan Gmail akun terlebih dahulu.");
 
   const {error} = await db.auth.resetPasswordForEmail(email,{
     redirectTo:window.location.origin
@@ -191,7 +562,7 @@ async function sendPasswordReset(){
   alert("Link pemulihan dikirim. Periksa Gmail kamu.");
 }
 
-async function saveNewPassword(){
+async function saveNewPassword() {
   const pw = document.getElementById("newPassword").value;
   const confirmPw = document.getElementById("confirmNewPassword").value;
 
@@ -201,7 +572,9 @@ async function saveNewPassword(){
   if(pw !== confirmPw)
     return alert("Konfirmasi password tidak sama.");
 
-  const {error} = await db.auth.updateUser({password:pw});
+  const {error} = await db.auth.updateUser({
+    password:pw
+  });
 
   if(error) return alert(error.message);
 
@@ -211,54 +584,74 @@ async function saveNewPassword(){
   showPage();
 }
 
-async function logout(){
+async function logout() {
   await db.auth.signOut();
+
   currentUser = null;
   cancelEdit();
   showPage();
 }
 
-async function loadNotes(){
-  const {data,error} = await db.from("notes")
-    .select("*").order("created_at",{ascending:false});
+async function loadNotes() {
+  const {data,error} = await db
+    .from("notes")
+    .select("*")
+    .order("created_at",{ascending:false});
 
   if(error) return alert("Gagal memuat: "+error.message);
 
   const area = document.getElementById("notes");
   area.innerHTML = "";
 
-  data.forEach(note=>{
+  if(!data.length) {
+    area.innerHTML = `
+      <div class="card empty">
+        ✦<br><br>
+        Belum ada catatan.<br>
+        Mulai tulis catatan pertamamu.
+      </div>
+    `;
+    return;
+  }
+
+  data.forEach(note => {
     const box = document.createElement("div");
-    box.className = "card";
+    box.className = "card note-card";
 
     const h = document.createElement("h3");
+    h.className = "note-title";
     h.textContent = note.title || "(Tanpa judul)";
 
     const p = document.createElement("div");
     p.className = "note";
     p.textContent = note.content || "";
 
-    const date = document.createElement("small");
+    const date = document.createElement("div");
+    date.className = "note-date";
     date.textContent = note.created_at
       ? new Date(note.created_at).toLocaleString("id-ID")
       : "";
 
+    const actions = document.createElement("div");
+    actions.className = "note-actions";
+
     const edit = document.createElement("button");
-    edit.textContent = "Edit";
+    edit.textContent = "✎ Edit";
     edit.className = "secondary";
-    edit.onclick = ()=>editNote(note);
+    edit.onclick = () => editNote(note);
 
     const del = document.createElement("button");
-    del.textContent = "Hapus";
+    del.textContent = "✕ Hapus";
     del.className = "danger";
-    del.onclick = ()=>deleteNote(note.id);
+    del.onclick = () => deleteNote(note.id);
 
-    box.append(h,p,date,edit,del);
+    actions.append(edit,del);
+    box.append(h,p,date,actions);
     area.appendChild(box);
   });
 }
 
-async function saveNote(){
+async function saveNote() {
   const title = document.getElementById("title").value.trim();
   const content = document.getElementById("content").value.trim();
 
@@ -267,56 +660,71 @@ async function saveNote(){
 
   let result;
 
-  if(editingId){
-    result = await db.from("notes")
+  if(editingId) {
+    result = await db
+      .from("notes")
       .update({title,content})
       .eq("id",editingId);
-  }else{
-    result = await db.from("notes").insert({
-      title,content,user_id:currentUser.id
-    });
+  } else {
+    result = await db
+      .from("notes")
+      .insert({
+        title,
+        content,
+        user_id:currentUser.id
+      });
   }
 
-  if(result.error) return alert(result.error.message);
+  if(result.error)
+    return alert(result.error.message);
 
   cancelEdit();
   loadNotes();
 }
 
-function editNote(note){
+function editNote(note) {
   editingId = note.id;
+
   document.getElementById("title").value = note.title || "";
   document.getElementById("content").value = note.content || "";
-  window.scrollTo({top:0,behavior:"smooth"});
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
-function cancelEdit(){
+function cancelEdit() {
   editingId = null;
   document.getElementById("title").value = "";
   document.getElementById("content").value = "";
 }
 
-async function deleteNote(id){
-  if(!confirm("Hapus catatan ini?")) return;
+async function deleteNote(id) {
+  if(!confirm("Hapus catatan ini?"))
+    return;
 
-  const {error} = await db.from("notes").delete().eq("id",id);
+  const {error} = await db
+    .from("notes")
+    .delete()
+    .eq("id",id);
 
   if(error) return alert(error.message);
 
   loadNotes();
 }
 
-db.auth.onAuthStateChange((event,session)=>{
+db.auth.onAuthStateChange((event,session) => {
   currentUser = session?.user || null;
 
-  if(event === "PASSWORD_RECOVERY"){
+  if(event === "PASSWORD_RECOVERY")
     recoveryMode = true;
-  }
 
   showPage();
 });
 
 checkUser();
 </script>
+
 </body>
 </html>
