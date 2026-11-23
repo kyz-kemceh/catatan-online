@@ -513,7 +513,7 @@ button:active {
 </div>
 
 <div class="footer">
-  Designed with <span>✦</span> by Jack
+  Designed with <span>✦</span> Jack
 </div>
 
 </main>
@@ -899,15 +899,25 @@ async function generateCustom(amount) {
 
   if (!suffix) return alert("Simpan custom terlebih dahulu!");
 
-  const chars = "abcdefghijklmnopqrstuvwxyz";
-  const emails = [];
+  const syllables = [
+  "wav", "reln", "tuyl", "zup", "vel",
+  "drax", "nori", "luma", "lexa", "ravi",
+  "bot", "zavi", "nexa", "dori", "lavi",
+  "varen", "cel", "runa", "tavi", "moru"
+];
+
+const emails = [];
 
   for (let i = 0; i < amount; i++) {
     let username = "";
 
-    for (let j = 0; j < 15; j++) {
-      username += chars[Math.floor(Math.random() * chars.length)];
-    }
+    const parts = 3 + Math.floor(Math.random() * 2);
+
+for (let j = 0; j < parts; j++) {
+  username += syllables[
+    Math.floor(Math.random() * syllables.length)
+  ];
+}
 
     emails.push(username + suffix + "@gmail.com");
   }
