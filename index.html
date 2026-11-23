@@ -111,22 +111,12 @@ button:active {
     </div>
 
     <button
-      id="adminButtonBox"
-      onclick="openAdminPage()"
-      title="Admin"
-      style="
-        width:32px;
-        height:32px;
-        min-width:32px;
-        padding:0;
-        margin-left:8px;
-        border-radius:10px;
-        background:#27213f;
-        color:#c4b5fd;
-        border:1px solid #7c3aed;
-        font-size:16px;
-      ">
-      ♛
+  id="adminButtonBox"
+  onclick="openAdminPage()"
+  title="Admin"
+  style="display:none;width:32px;height:32px;min-width:32px;padding:0;margin-left:8px;border-radius:10px;background:#27213f;color:#c4b5fd;border:1px solid #7c3aed;font-size:16px;"
+>
+  ♛
     </button>
 
   </div>
@@ -630,13 +620,6 @@ function renderAdminData(){
 initAdminButton();
   checkUser();
 </script>
-  <div class="card" id="adminButtonBox"
-     style="margin-top:15px;display:none">
-
-  <button class="full" onclick="toggleAdmin()">
-    🔐 Administrasi
-  </button>
-
   </div>
 </body>
 </html>
