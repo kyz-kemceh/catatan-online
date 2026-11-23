@@ -711,23 +711,25 @@ initAdminButton();
     <hr>
 
     <h3>Tambah Data Simulasi</h3>
+<input
+  id="adminName"
+  type="text"
+  placeholder="Nama penyetor"
+>
 
-    <input
-      id="adminName"
-      type="text"
-      placeholder="Nama"
-    >
+<textarea
+  id="adminListInput"
+  rows="6"
+  placeholder="Masukkan data simulasi, satu data per baris..."
+></textarea>
 
-    <input
-      id="adminAmount"
-      type="number"
-      min="1"
-      placeholder="Jumlah"
-    >
+<div id="adminCountPreview">
+  Jumlah data: 0
+</div>
 
-    <button class="full" onclick="addAdminPerson()">
-      + Tambahkan
-    </button>
+<button class="full" onclick="addAdminPerson()">
+  + Simpan Data
+</button>
 
     <div id="adminList"></div>
 
