@@ -93,6 +93,41 @@ button:active {
 @media(max-width:480px){header{padding:16px}h1{font-size:18px}.logo{width:38px;height:38px}main{padding:20px 12px 40px}.card{padding:17px;border-radius:17px}.creator strong{font-size:11px}}
 </style>
 </head>
+  <!-- ADMIN DATA SIMULASI -->
+<div class="card" style="margin-top:20px">
+
+  <h2 class="section-title">
+    📊 Administrasi
+  </h2>
+
+  <p class="description">
+    Pencatatan setoran dan jumlah data simulasi.
+  </p>
+
+  <input
+    type="text"
+    id="adminName"
+    placeholder="Nama penyetor"
+  >
+
+  <input
+    type="number"
+    id="adminAmount"
+    min="1"
+    placeholder="Jumlah setoran"
+  >
+
+  <button onclick="addAdminPerson()" class="full">
+    + Tambahkan Setoran
+  </button>
+
+  <div id="adminList"></div>
+
+</div>
+
+<script>
+renderAdminData();
+</script>
 <body>
 <header><div class="header-inner"><div class="brand"><div class="logo">✦</div><div><h1>Jack Gmail Tools</h1><div class="subtitle">Your personal notes organizer</div></div></div><div class="creator"><small>CREATED BY</small><strong>✦ JACK ✦</strong></div></div></header>
 <main>
@@ -393,6 +428,122 @@ document.addEventListener("click", function(event) {
     console.log("Sound error:", err);
   }
 });
+  // ===============================
+// ADMIN DATA SIMULASI
+// ===============================
+
+let adminData = JSON.parse(localStorage.getItem("adminData") || "[]");
+
+function saveAdminData(){
+  localStorage.setItem("adminData", JSON.stringify(adminData));
+  renderAdminData();
+}
+
+function addAdminPerson(){
+  const name = document.getElementById("adminName").value.trim();
+  const amount = Number(document.getElementById("adminAmount").value);
+
+  if(!name) return alert("Masukkan nama!");
+  if(!amount || amount < 1) return alert("Jumlah harus lebih dari 0!");
+
+  adminData.push({
+    id: Date.now(),
+    name: name,
+    total: amount,
+    processed: 0,
+    history: []
+  });
+
+  document.getElementById("adminName").value = "";
+  document.getElementById("adminAmount").value = "";
+
+  saveAdminData();
+}
+
+function updateAdminPerson(id){
+  const person = adminData.find(x => x.id === id);
+  if(!person) return;
+
+  const amount = Number(
+    document.getElementById("process_" + id).value
+  );
+
+  if(!amount || amount < 1){
+    return alert("Masukkan jumlah yang valid!");
+  }
+
+  if(amount > person.total - person.processed){
+    return alert("Jumlah melebihi sisa!");
+  }
+
+  person.processed += amount;
+
+  person.history.push({
+    amount: amount,
+    date: new Date().toLocaleString("id-ID")
+  });
+
+  saveAdminData();
+}
+
+function deleteAdminPerson(id){
+  if(!confirm("Hapus data ini?")) return;
+
+  adminData = adminData.filter(x => x.id !== id);
+  saveAdminData();
+}
+
+function renderAdminData(){
+  const container = document.getElementById("adminList");
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  adminData.forEach(person => {
+    const remaining = person.total - person.processed;
+
+    container.innerHTML += `
+      <div class="card" style="margin-top:12px">
+
+        <h3>${person.name}</h3>
+
+        <p>Jumlah awal: ${person.total}</p>
+        <p>Sudah diproses: ${person.processed}</p>
+        <p>Sisa: <b>${remaining}</b></p>
+
+        <input
+          type="number"
+          id="process_${person.id}"
+          min="1"
+          max="${remaining}"
+          placeholder="Jumlah diproses"
+        >
+
+        <button onclick="updateAdminPerson(${person.id})">
+          Kurangi jumlah
+        </button>
+
+        <h4>Riwayat</h4>
+
+        ${
+          person.history.map(h => `
+            <p>
+              - ${h.amount} (${h.date})
+            </p>
+          `).join("")
+        }
+
+        <button
+          class="danger"
+          onclick="deleteAdminPerson(${person.id})"
+        >
+          Hapus
+        </button>
+
+      </div>
+    `;
+  });
+}
   checkUser();
 </script>
 </body>
