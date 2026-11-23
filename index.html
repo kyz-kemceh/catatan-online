@@ -444,25 +444,71 @@ button:active {
   <h2 class="section-title">⚡ Generate Username</h2>
   <p class="description">Generate username sesuai pilihanmu.</p>
 
-  <input
-    id="generateAmount"
-    type="number"
-    min="1"
-    max="1000"
-    placeholder="Jumlah generate"
-  >
-
-  <div style="display:flex;gap:10px;margin-top:10px">
-    <button class="primary" style="flex:1"
-      onclick="showGenerateMode('free')">
+  <div style="display:flex;gap:10px">
+    <button class="primary" onclick="showGenerateMode('free')">
       🎲 Bebas
     </button>
-
-    <button class="secondary" style="flex:1"
-      onclick="showGenerateMode('custom')">
+    <button class="primary" onclick="showGenerateMode('custom')">
       ⚙️ Custom
     </button>
   </div>
+
+  <div id="freeOptions" style="display:none;margin-top:15px">
+    <p class="description">Pilih jumlah:</p>
+
+    <div style="display:flex;gap:10px">
+      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
+      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
+      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
+    </div>
+
+    <div id="freeGenerateButtons" style="display:none;margin-top:15px">
+      <p class="description">Pilih variasi:</p>
+
+      <button class="primary full" onclick="generateFree(0)">
+        Tanpa Angka
+      </button>
+
+      <button class="primary full" onclick="generateFree(2)">
+        2 Angka
+      </button>
+
+      <button class="primary full" onclick="generateFree(3)">
+        3 Angka
+      </button>
+    </div>
+  </div>
+
+  <div id="customOptions" style="display:none;margin-top:15px">
+    <p class="description">Pilih jumlah:</p>
+
+    <div style="display:flex;gap:10px">
+      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
+      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
+      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
+    </div>
+
+    <div id="customGenerateButtons" style="display:none;margin-top:15px">
+      <input
+        id="customSuffix"
+        type="text"
+        placeholder="Masukkan akhiran custom"
+      >
+
+      <button class="primary full" onclick="saveCustomSuffix()">
+        💾 Simpan Custom
+      </button>
+
+      <button class="primary full" onclick="generateCustom()">
+        ✨ Generate
+      </button>
+    </div>
+  </div>
+
+  <input id="generateAmount" type="hidden" value="">
+
+  <div id="customStatus" class="description" style="margin-top:12px"></div>
+</div>
 
   <div id="freeOptions" style="display:none;margin-top:15px">
     <p class="description">Jumlah angka di belakang:</p>
@@ -916,7 +962,28 @@ function showGenerateMode(mode) {
   document.getElementById("customOptions").style.display =
     mode === "custom" ? "block" : "none";
 
+  document.getElementById("freeGenerateButtons").style.display = "none";
+  document.getElementById("customGenerateButtons").style.display = "none";
+
+  document.getElementById("generateAmount").value = "";
+
   document.getElementById("customStatus").textContent = "";
+}
+
+function chooseGenerateAmount(amount) {
+  document.getElementById("generateAmount").value = amount;
+
+  const freeVisible =
+    document.getElementById("freeOptions").style.display !== "none";
+
+  document.getElementById("freeGenerateButtons").style.display =
+    freeVisible ? "block" : "none";
+
+  document.getElementById("customGenerateButtons").style.display =
+    freeVisible ? "none" : "block";
+
+  document.getElementById("customStatus").textContent =
+    "Jumlah dipilih: " + amount;
 }
 
 function saveCustomSuffix() {
