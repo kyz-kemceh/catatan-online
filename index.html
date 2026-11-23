@@ -60,17 +60,88 @@ button:active{transform:scale(.97)}.primary{color:white;background:linear-gradie
 <div id="resetBox" class="card"><h2 class="section-title">Password Baru 🔐</h2><p class="description">Buat password baru untuk akunmu.</p><input id="newPassword" type="password" placeholder="Password baru"><input id="confirmNewPassword" type="password" placeholder="Ulangi password baru"><button class="primary full" onclick="saveNewPassword()">Simpan Password Baru</button></div>
 <div id="app">
 <div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea><button class="primary" onclick="saveNote()">✦ Simpan Catatan</button><button class="secondary" onclick="cancelEdit()">Batal</button></div>
-<div class="card merge-card"><h2 class="section-title">⚡ Generate Alamat Gmail Mu</h2><p class="description">Buat username contoh untuk pengujian (menggunakan domain gmail.com).</p>
-<div style="display:flex;gap:10px;margin-bottom:15px">
-  <button id="modeFree" class="mode-button active"
-    onclick="showGenerateMode('free')">🎲 Bebas</button>
+<div class="card merge-card">
 
-  <button id="modeCustom" class="mode-button"
-    onclick="showGenerateMode('custom')">⚙️ Custom</button>
+  <h2 class="section-title">⚡ Generate Username</h2>
+
+  <p class="description">
+    Buat username contoh untuk pengujian.
+  </p>
+
+  <div style="display:flex;gap:10px;margin-bottom:15px">
+    <button
+      id="modeFree"
+      class="mode-button active"
+      onclick="showGenerateMode('free')">
+      🎲 Bebas
+    </button>
+
+    <button
+      id="modeCustom"
+      class="mode-button"
+      onclick="showGenerateMode('custom')">
+      ⚙️ Custom
+    </button>
+  </div>
+
+  <div id="freeOptions" style="display:none;margin-top:15px">
+
+    <p class="description">Pilih jumlah username:</p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
+      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
+      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
+    </div>
+
+    <div id="freeGenerateButtons"
+         style="display:none;margin-top:15px">
+
+      <p class="description">Variasi:</p>
+
+      <button class="primary full"
+        onclick="generateFree(0)">Tanpa Angka</button>
+
+      <button class="primary full"
+        onclick="generateFree(2)">2 Angka</button>
+
+      <button class="primary full"
+        onclick="generateFree(3)">3 Angka</button>
+    </div>
+  </div>
+
+  <div id="customOptions" style="display:none;margin-top:15px">
+
+    <p class="description">Pilih jumlah username:</p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
+      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
+      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
+    </div>
+
+    <div id="customGenerateButtons"
+         style="display:none;margin-top:15px">
+
+      <input id="customSuffix"
+        type="text"
+        placeholder="Masukkan akhiran custom">
+
+      <button class="secondary full"
+        onclick="saveCustomSuffix()">💾 Simpan Custom</button>
+
+      <button class="primary full"
+        onclick="generateCustom()">✨ Generate</button>
+    </div>
+  </div>
+
+  <input id="generateAmount" type="hidden" value="">
+
+  <div id="customStatus"
+       class="description"
+       style="margin-top:12px"></div>
+
 </div>
-<div id="freeOptions" style="display:none;margin-top:15px"><p class="description">Pilih Jumlah Alamat Gmail:</p><div style="display:flex;gap:10px"><button class="primary" onclick="chooseGenerateAmount(5)">5</button><button class="primary" onclick="chooseGenerateAmount(10)">10</button><button class="primary" onclick="chooseGenerateAmount(15)">15</button></div><div id="freeGenerateButtons" style="display:none;margin-top:15px"><p class="description">Variasi:</p><button class="primary full" onclick="generateFree(0)">Tanpa Angka</button><button class="primary full" onclick="generateFree(2)">2 Angka</button><button class="primary full" onclick="generateFree(3)">3 Angka</button></div></div>
-<div id="customOptions" style="display:none;margin-top:15px"><p class="description">Pilih Jumlah Alamat Gmail:</p><div style="display:flex;gap:10px"><button class="primary" onclick="chooseGenerateAmount(5)">5</button><button class="primary" onclick="chooseGenerateAmount(10)">10</button><button class="primary" onclick="chooseGenerateAmount(15)">15</button></div><div id="customGenerateButtons" style="display:none;margin-top:15px"><input id="customSuffix" type="text" placeholder="Masukkan akhiran custom"><button class="secondary full" onclick="saveCustomSuffix()">💾 Simpan Custom</button><button class="primary full" onclick="generateCustom()">✨ Generate Gmail</button></div></div>
-<input id="generateAmount" type="hidden" value=""><div id="customStatus" class="description" style="margin-top:12px"></div></div>
 <div class="card merge-card"><h2 class="section-title">✦ Gabungkan teks email</h2><p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p><button class="primary full" onclick="mergeAllGmail()">✦ Gabungkan Semua Email</button><div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div><textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea><button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button><button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button><button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>
 <p class="description" style="margin-left:5px">Semua catatan pribadimu.</p><div id="notes"></div><button class="danger full" onclick="deleteAllNotes()">🗑️ Hapus Semua Catatan</button><button class="danger full" onclick="logout()">Keluar dari Akun</button>
 </div>
