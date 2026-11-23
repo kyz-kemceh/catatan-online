@@ -195,7 +195,32 @@ const SUPABASE_URL="https://rqjfekjvbrhsiwhmzwsb.supabase.co";
 const SUPABASE_KEY="sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null,editingId=null,recoveryMode=false;
+function openAdminPage(){
 
+  if(!currentUser){
+    alert("Silakan login terlebih dahulu!");
+    return;
+  }
+
+  if(currentUser.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
+    alert("Akses ditolak!");
+    return;
+  }
+
+  document.querySelector("header").style.display = "none";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("adminPage").style.display = "block";
+
+  renderAdminData();
+}
+
+function closeAdminPage(){
+
+  document.getElementById("adminPage").style.display = "none";
+
+  document.querySelector("header").style.display = "flex";
+  document.getElementById("app").style.display = "block";
+}
 async function checkUser(){
   const {data:{session}}=await db.auth.getSession();
 
@@ -665,5 +690,49 @@ initAdminButton();
   checkUser();
 </script>
   </div>
+  <!-- HALAMAN ADMIN -->
+<div id="adminPage" style="display:none;padding:15px">
+
+  <div class="card">
+
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h2>♛ Admin Panel</h2>
+
+      <button onclick="closeAdminPage()"
+        style="width:40px">
+        ←
+      </button>
+    </div>
+
+    <p class="description">
+      Ruang administrasi pribadi
+    </p>
+
+    <hr>
+
+    <h3>Tambah Data Simulasi</h3>
+
+    <input
+      id="adminName"
+      type="text"
+      placeholder="Nama"
+    >
+
+    <input
+      id="adminAmount"
+      type="number"
+      min="1"
+      placeholder="Jumlah"
+    >
+
+    <button class="full" onclick="addAdminPerson()">
+      + Tambahkan
+    </button>
+
+    <div id="adminList"></div>
+
+  </div>
+
+</div>
 </body>
 </html>
