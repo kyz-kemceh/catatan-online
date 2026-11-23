@@ -909,12 +909,22 @@ async function saveMergedNote() {
   loadNotes();
   }
     
+function showGenerateMode(mode) {
+  document.getElementById("freeOptions").style.display =
+    mode === "free" ? "block" : "none";
+
+  document.getElementById("customOptions").style.display =
+    mode === "custom" ? "block" : "none";
+
+  document.getElementById("customStatus").textContent = "";
+}
+
 function saveCustomSuffix() {
   const suffix = document.getElementById("customSuffix").value
     .trim()
     .replace(/[^a-zA-Z0-9]/g, "");
 
-  if (!suffix) return alert("Masukkan akhiran custom!");
+  if (!suffix) return alert("Masukkan custom terlebih dahulu!");
 
   localStorage.setItem("customSuffix", suffix);
   document.getElementById("customSuffix").value = suffix;
@@ -922,19 +932,103 @@ function saveCustomSuffix() {
   alert("Custom berhasil disimpan: " + suffix);
 }
 
-async function generateCustom(amount) {
-  if (!currentUser) return alert("Silakan login terlebih dahulu.");
+function getGenerateAmount() {
+  const amount = Number(
+    document.getElementById("generateAmount").value
+  );
+
+  if (!Number.isInteger(amount) || amount < 1 || amount > 1000) {
+    alert("Masukkan jumlah antara 1 sampai 1000!");
+    return null;
+  }
+
+  return amount;
+}
+
+function createUsernames(amount, digitCount, suffix = "") {
+  const syllables = [
+    "qav", "ren", "tul", "zun", "vel",
+    "drax", "nori", "luma", "vexa", "ravi",
+    "qor", "zavi", "nexa", "dori", "lavi",
+    "varen", "xel", "runa", "tavi", "mora",
+    "krev", "sova", "yant", "brel", "wexi",
+    "orva", "juni", "fex", "dalu", "rhex"
+  ];
+
+  const results = new Set();
+
+  while (results.size < amount) {
+    let username = "";
+    const parts = 3 + Math.floor(Math.random() * 2);
+
+    for (let i = 0; i < parts; i++) {
+      username += syllables[
+        Math.floor(Math.random() * syllables.length)
+      ];
+    }
+
+    for (let i = 0; i < digitCount; i++) {
+      username += Math.floor(Math.random() * 10);
+    }
+
+    username += suffix;
+    results.add(username + "@example.com");
+  }
+
+  return [...results];
+}
+
+async function saveGeneratedEmails(emails, title) {
+  if (!currentUser) return alert("Silakan login terlebih dahulu!");
+
+  const { error } = await db.from("notes").insert({
+    title: title,
+    content: emails.join("\n"),
+    user_id: currentUser.id
+  });
+
+  if (error) return alert("Gagal menyimpan: " + error.message);
+
+  document.getElementById("customStatus").textContent =
+    emails.length + " username berhasil disimpan ke catatan.";
+
+  await loadNotes();
+}
+
+async function generateFree(digitCount) {
+  const amount = getGenerateAmount();
+  if (amount === null) return;
+
+  const emails = createUsernames(amount, digitCount);
+
+  const label = digitCount === 0
+    ? "Tanpa Angka"
+    : digitCount + " Angka";
+
+  await saveGeneratedEmails(
+    emails,
+    "Generate Bebas — " + label + " (" + amount + ")"
+  );
+}
+
+async function generateCustom() {
+  const amount = getGenerateAmount();
+  if (amount === null) return;
 
   const suffix = localStorage.getItem("customSuffix");
 
   if (!suffix) return alert("Simpan custom terlebih dahulu!");
 
-  const syllables = [
-  "wav", "reln", "tuyl", "zup", "vel",
-  "drax", "nori", "luma", "lexa", "ravi",
-  "bot", "zavi", "nexa", "dori", "lavi",
-  "varen", "cel", "runa", "tavi", "moru"
-];
+  const emails = createUsernames(amount, 0, suffix);
+
+  await saveGeneratedEmails(
+    emails,
+    "Generate Custom — " + suffix + " (" + amount + ")"
+  );
+}
+
+document.getElementById("customSuffix").value =
+  localStorage.getItem("customSuffix") || "";
 
 const emails = [];
 
