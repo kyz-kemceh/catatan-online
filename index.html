@@ -960,6 +960,11 @@ checkUser();
 document.addEventListener("click", function(e) {
   if (!e.target.closest("button")) return;
 
+  // Getaran HP
+  if (navigator.vibrate) {
+    navigator.vibrate(30);
+  }
+
   try {
     const AudioContextClass =
       window.AudioContext || window.webkitAudioContext;
@@ -971,39 +976,39 @@ document.addEventListener("click", function(e) {
     clickAudioCtx.resume().then(() => {
       const now = clickAudioCtx.currentTime;
 
-      // Bunyi utama: klik tegas
+      // Klik tajam
       const osc = clickAudioCtx.createOscillator();
       const gain = clickAudioCtx.createGain();
 
       osc.type = "square";
-      osc.frequency.setValueAtTime(1100, now);
-      osc.frequency.exponentialRampToValueAtTime(500, now + 0.04);
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(350, now + 0.06);
 
-      gain.gain.setValueAtTime(0.18, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
 
       osc.connect(gain);
       gain.connect(clickAudioCtx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.07);
+      osc.stop(now + 0.09);
 
-      // Bunyi tambahan agar lebih nendang
-      const osc2 = clickAudioCtx.createOscillator();
-      const gain2 = clickAudioCtx.createGain();
+      // Bass punch
+      const bass = clickAudioCtx.createOscillator();
+      const bassGain = clickAudioCtx.createGain();
 
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(180, now);
-      osc2.frequency.exponentialRampToValueAtTime(90, now + 0.05);
+      bass.type = "sine";
+      bass.frequency.setValueAtTime(160, now);
+      bass.frequency.exponentialRampToValueAtTime(55, now + 0.1);
 
-      gain2.gain.setValueAtTime(0.22, now);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+      bassGain.gain.setValueAtTime(0.5, now);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
 
-      osc2.connect(gain2);
-      gain2.connect(clickAudioCtx.destination);
+      bass.connect(bassGain);
+      bassGain.connect(clickAudioCtx.destination);
 
-      osc2.start(now);
-      osc2.stop(now + 0.06);
+      bass.start(now);
+      bass.stop(now + 0.1);
     });
 
   } catch (error) {
