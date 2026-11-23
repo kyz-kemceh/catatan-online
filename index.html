@@ -439,38 +439,68 @@ button:active {
     </button>
   </div>
 
-  <div class="card merge-card">
-  <h2 class="section-title">⚙️ Generate Custom</h2>
-
-  <p class="description">
-    Generate username testing dengan akhiran custom.
-  </p>
+  
+<div class="card merge-card">
+  <h2 class="section-title">⚡ Generate Username</h2>
+  <p class="description">Generate username sesuai pilihanmu.</p>
 
   <input
-    id="customSuffix"
-    type="text"
-    placeholder="Masukkan akhiran, contoh: jezz"
+    id="generateAmount"
+    type="number"
+    min="1"
+    max="1000"
+    placeholder="Jumlah generate"
   >
 
-  <button class="primary full" onclick="saveCustomSuffix()">
-    💾 Simpan Custom
-  </button>
+  <div style="display:flex;gap:10px;margin-top:10px">
+    <button class="primary" style="flex:1"
+      onclick="showGenerateMode('free')">
+      🎲 Bebas
+    </button>
 
-  <div style="margin-top:15px">
-    <p class="description">Pilih jumlah generate:</p>
+    <button class="secondary" style="flex:1"
+      onclick="showGenerateMode('custom')">
+      ⚙️ Custom
+    </button>
+  </div>
 
-    <div style="display:flex;gap:10px">
-      <button class="primary" onclick="generateCustom(5)">5</button>
-      <button class="primary" onclick="generateCustom(10)">10</button>
-      <button class="primary" onclick="generateCustom(15)">15</button>
+  <div id="freeOptions" style="display:none;margin-top:15px">
+    <p class="description">Jumlah angka di belakang:</p>
+
+    <div style="display:flex;gap:8px">
+      <button class="primary" style="flex:1"
+        onclick="generateFree(0)">Tanpa angka</button>
+
+      <button class="primary" style="flex:1"
+        onclick="generateFree(2)">2 angka</button>
+
+      <button class="primary" style="flex:1"
+        onclick="generateFree(3)">3 angka</button>
     </div>
   </div>
 
-  <div id="customStatus" class="description"
-       style="margin-top:12px"></div>
+  <div id="customOptions" style="display:none;margin-top:15px">
+    <input
+      id="customSuffix"
+      type="text"
+      placeholder="Masukkan custom akhiran"
+    >
+
+    <button class="secondary full"
+      onclick="saveCustomSuffix()">
+      💾 Simpan Custom
+    </button>
+
+    <button class="primary full"
+      style="margin-top:10px"
+      onclick="generateCustom()">
+      🚀 Generate Custom
+    </button>
   </div>
-<div class="card merge-card">
-  <h2 class="section-title">📧 Gabungkan Semua Gmail</h2>
+
+  <div id="customStatus" class="description"
+    style="margin-top:12px"></div>
+</div>
   <p class="description">
     Satukan semua Gmail dari seluruh catatanmu menjadi satu daftar.
   </p>
