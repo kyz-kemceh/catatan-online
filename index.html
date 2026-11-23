@@ -415,7 +415,8 @@ async function generateCustom(length){
     "Generate Alamat Gmail — " + suffix + " (" + n + ")"
   );
   }
-document.getElementById("customSuffix").value=localStorage.getItem("customSuffix")||"";
+document.getElementById("customSuffix").value =
+  localStorage.getItem("customSuffix") || "";
 
 db.auth.onAuthStateChange((event, session) => {
 
@@ -423,26 +424,32 @@ db.auth.onAuthStateChange((event, session) => {
 
   if(event === "PASSWORD_RECOVERY"){
     recoveryMode = true;
-  }
-
-  if(event === "SIGNED_OUT"){
+  } else if(event === "SIGNED_OUT"){
+    recoveryMode = false;
+  } else if(event === "SIGNED_IN"){
     recoveryMode = false;
   }
 
-  showPage();
-
+  // Sembunyikan tombol admin terlebih dahulu
   const adminButton = document.getElementById("adminButtonBox");
-
   if(adminButton){
     adminButton.style.display = "none";
-
-    if(currentUser && !recoveryMode &&
-       currentUser.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-      adminButton.style.display = "block";
-    }
   }
 
-}); 
+  // Perbarui halaman
+  showPage();
+
+  // Cek hak akses
+  if(
+    adminButton &&
+    currentUser &&
+    !recoveryMode &&
+    currentUser.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+  ){
+    adminButton.style.display = "block";
+  }
+
+});
   //SOUND EFFECT KLIK
 let clickAudioCtx;
 
