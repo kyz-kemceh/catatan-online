@@ -797,6 +797,15 @@ async function mergeAllGmail() {
     block:"nearest"
   });
 }
+  function clearMergedEmails() {
+  if(!confirm("Yakin ingin menghapus semua Gmail dari hasil gabungan?")) return;
+
+  document.getElementById("mergedEmails").value = "";
+  document.getElementById("mergeCount").textContent = "0 Gmail";
+  document.getElementById("mergeResult").style.display = "block";
+
+  alert("Semua Gmail hasil gabungan berhasil dihapus!");
+  }
 
 async function copyMergedEmails() {
   const text = document.getElementById("mergedEmails").value;
