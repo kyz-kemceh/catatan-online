@@ -160,7 +160,7 @@ document.getElementById("generateAmount").value=amount;
 const free=document.getElementById("freeOptions").style.display==="block";
 document.getElementById("freeGenerateButtons").style.display=free?"block":"none";
 document.getElementById("customGenerateButtons").style.display=free?"none":"block";
-document.getElementById("customStatus").textContent="Jumlah demo dipilih: "+amount;
+document.getElementById("customStatus").textContent="Jumlah alamat gmail dipilih: "+amount;
 }
 function saveCustomSuffix(){const s=document.getElementById("customSuffix").value.trim().replace(/[^a-zA-Z0-9]/g,"");if(!s)return alert("Masukkan akhiran custom!");localStorage.setItem("customSuffix",s);document.getElementById("customSuffix").value=s;alert("Akhiran tersimpan: "+s);}
 function demoAmount(){const n=Number(document.getElementById("generateAmount").value);if(![5,10,15].includes(n)){alert("Pilih jumlah 5, 10, atau 15 terlebih dahulu.");return null;}return n;}
