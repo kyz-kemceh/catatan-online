@@ -878,7 +878,7 @@ async function saveMergedNote() {
 
   loadNotes();
   }
-    
+    async function mergeAllGmail() {
 db.auth.onAuthStateChange((event,session) => {
   currentUser = session?.user || null;
 
