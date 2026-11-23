@@ -424,22 +424,26 @@ db.auth.onAuthStateChange((event, session) => {
 
   if(event === "PASSWORD_RECOVERY"){
     recoveryMode = true;
-  } else if(event === "SIGNED_OUT"){
-    recoveryMode = false;
-  } else if(event === "SIGNED_IN"){
+  } else {
     recoveryMode = false;
   }
 
-  // Sembunyikan tombol admin terlebih dahulu
   const adminButton = document.getElementById("adminButtonBox");
+  const adminPage = document.getElementById("adminPage");
+
+  // Sembunyikan halaman admin terlebih dahulu
+  if(adminPage){
+    adminPage.style.display = "none";
+  }
+
+  // Sembunyikan tombol admin terlebih dahulu
   if(adminButton){
     adminButton.style.display = "none";
   }
 
-  // Perbarui halaman
   showPage();
 
-  // Cek hak akses
+  // Tampilkan tombol hanya untuk admin
   if(
     adminButton &&
     currentUser &&
