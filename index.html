@@ -315,40 +315,22 @@ function makeDemoNames(amount, length, suffix = ""){
 }
 
 const syllables = [];
-
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
-const vowels = "aiueo";
-const consonants = "bcdfghjklmnpqrstvwxyz";
 
-function randomChar(chars){
-  return chars[Math.floor(Math.random() * chars.length)];
-}
-
-// 2 huruf: 26 × 26 = 676
+// Kombinasi 2 huruf: 676
 for(let i = 0; i < 26; i++){
   for(let j = 0; j < 26; j++){
     syllables.push(alphabet[i] + alphabet[j]);
   }
 }
 
-// 3 huruf: 17.576
+// Kombinasi 3 huruf: 17.576
 for(let i = 0; i < 26; i++){
   for(let j = 0; j < 26; j++){
     for(let k = 0; k < 26; k++){
-      syllables.push(alphabet[i] + alphabet[j] + alphabet[k]);
-    }
-  }
-}
-
-// 4 huruf: 456.976
-for(let i = 0; i < 26; i++){
-  for(let j = 0; j < 26; j++){
-    for(let k = 0; k < 26; k++){
-      for(let l = 0; l < 26; l++){
-        syllables.push(
-          alphabet[i] + alphabet[j] + alphabet[k] + alphabet[l]
-        );
-      }
+      syllables.push(
+        alphabet[i] + alphabet[j] + alphabet[k]
+      );
     }
   }
 }
