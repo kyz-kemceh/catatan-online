@@ -93,41 +93,54 @@ button:active {
 @media(max-width:480px){header{padding:16px}h1{font-size:18px}.logo{width:38px;height:38px}main{padding:20px 12px 40px}.card{padding:17px;border-radius:17px}.creator strong{font-size:11px}}
 </style>
 </head>
-  <!-- ADMIN DATA SIMULASI -->
-<div class="card" style="margin-top:20px">
-
-  <h2 class="section-title">
-    📊 Administrasi
-  </h2>
-
-  <p class="description">
-    Pencatatan setoran dan jumlah data simulasi.
-  </p>
-
-  <input
-    type="text"
-    id="adminName"
-    placeholder="Nama penyetor"
-  >
-
-  <input
-    type="number"
-    id="adminAmount"
-    min="1"
-    placeholder="Jumlah setoran"
-  >
-
-  <button onclick="addAdminPerson()" class="full">
-    + Tambahkan Setoran
+<!-- TOMBOL ADMINISTRASI -->
+<div class="card" style="margin-top:15px">
+  <button class="full" onclick="toggleAdmin()">
+    🔐 Administrasi
   </button>
-
-  <div id="adminList"></div>
-
 </div>
 
-<script>
-renderAdminData();
-</script>
+<!-- RUANG ADMIN -->
+<div id="adminRoom" style="display:none">
+
+  <div class="card" style="margin-top:15px">
+
+    <h2 class="section-title">
+      🛡️ Ruang Administrasi
+    </h2>
+
+    <p class="description">
+      Panel khusus administrator.
+    </p>
+
+    <button class="full" onclick="toggleAdmin()">
+      Tutup Administrasi
+    </button>
+
+    <hr>
+
+    <input
+      type="text"
+      id="adminName"
+      placeholder="Nama penyetor"
+    >
+
+    <input
+      type="number"
+      id="adminAmount"
+      min="1"
+      placeholder="Jumlah setoran"
+    >
+
+    <button class="full" onclick="addAdminPerson()">
+      + Tambahkan Setoran
+    </button>
+
+    <div id="adminList"></div>
+
+  </div>
+
+</div>
 <body>
 <header><div class="header-inner"><div class="brand"><div class="logo">✦</div><div><h1>Jack Gmail Tools</h1><div class="subtitle">Your personal notes organizer</div></div></div><div class="creator"><small>CREATED BY</small><strong>✦ JACK ✦</strong></div></div></header>
 <main>
@@ -429,26 +442,76 @@ document.addEventListener("click", function(event) {
   }
 });
   // ===============================
-// ADMIN DATA SIMULASI
+// RUANG ADMIN
 // ===============================
 
-let adminData = JSON.parse(localStorage.getItem("adminData") || "[]");
+// GANTI dengan email akun kamu sendiri
+const ADMIN_EMAIL = "emailkamu@gmail.com";
+
+let adminData = JSON.parse(
+  localStorage.getItem("adminData") || "[]"
+);
+
+let adminOpen = false;
+
+async function isAdmin(){
+  const { data } = await db.auth.getUser();
+
+  return (
+    data?.user?.email?.toLowerCase() ===
+    ADMIN_EMAIL.toLowerCase()
+  );
+}
+
+async function toggleAdmin(){
+
+  if(!(await isAdmin())){
+    alert("Akses ditolak! Khusus administrator.");
+    return;
+  }
+
+  adminOpen = !adminOpen;
+
+  document.getElementById("adminRoom").style.display =
+    adminOpen ? "block" : "none";
+
+  if(adminOpen){
+    renderAdminData();
+  }
+}
 
 function saveAdminData(){
-  localStorage.setItem("adminData", JSON.stringify(adminData));
+  localStorage.setItem(
+    "adminData",
+    JSON.stringify(adminData)
+  );
+
   renderAdminData();
 }
 
-function addAdminPerson(){
-  const name = document.getElementById("adminName").value.trim();
-  const amount = Number(document.getElementById("adminAmount").value);
+async function addAdminPerson(){
 
-  if(!name) return alert("Masukkan nama!");
-  if(!amount || amount < 1) return alert("Jumlah harus lebih dari 0!");
+  if(!(await isAdmin())){
+    return alert("Akses ditolak!");
+  }
+
+  const name =
+    document.getElementById("adminName").value.trim();
+
+  const amount =
+    Number(document.getElementById("adminAmount").value);
+
+  if(!name){
+    return alert("Masukkan nama!");
+  }
+
+  if(amount < 1 || !Number.isInteger(amount)){
+    return alert("Jumlah harus valid!");
+  }
 
   adminData.push({
     id: Date.now(),
-    name: name,
+    name,
     total: amount,
     processed: 0,
     history: []
@@ -460,7 +523,12 @@ function addAdminPerson(){
   saveAdminData();
 }
 
-function updateAdminPerson(id){
+async function updateAdminPerson(id){
+
+  if(!(await isAdmin())){
+    return alert("Akses ditolak!");
+  }
+
   const person = adminData.find(x => x.id === id);
   if(!person) return;
 
@@ -468,83 +536,119 @@ function updateAdminPerson(id){
     document.getElementById("process_" + id).value
   );
 
-  if(!amount || amount < 1){
+  const remaining = person.total - person.processed;
+
+  if(!Number.isInteger(amount) || amount < 1){
     return alert("Masukkan jumlah yang valid!");
   }
 
-  if(amount > person.total - person.processed){
+  if(amount > remaining){
     return alert("Jumlah melebihi sisa!");
   }
 
   person.processed += amount;
 
   person.history.push({
-    amount: amount,
+    amount,
     date: new Date().toLocaleString("id-ID")
   });
 
   saveAdminData();
 }
 
-function deleteAdminPerson(id){
-  if(!confirm("Hapus data ini?")) return;
+async function deleteAdminPerson(id){
+
+  if(!(await isAdmin())){
+    return alert("Akses ditolak!");
+  }
+
+  if(!confirm("Hapus catatan ini?")) return;
 
   adminData = adminData.filter(x => x.id !== id);
+
   saveAdminData();
 }
 
 function renderAdminData(){
-  const container = document.getElementById("adminList");
-  if(!container) return;
+
+  const container =
+    document.getElementById("adminList");
+
+  if(!container || !adminOpen) return;
 
   container.innerHTML = "";
 
   adminData.forEach(person => {
-    const remaining = person.total - person.processed;
 
-    container.innerHTML += `
-      <div class="card" style="margin-top:12px">
+    const remaining =
+      person.total - person.processed;
 
-        <h3>${person.name}</h3>
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.marginTop = "12px";
 
-        <p>Jumlah awal: ${person.total}</p>
-        <p>Sudah diproses: ${person.processed}</p>
-        <p>Sisa: <b>${remaining}</b></p>
+    card.innerHTML = `
+      <h3></h3>
 
-        <input
-          type="number"
-          id="process_${person.id}"
-          min="1"
-          max="${remaining}"
-          placeholder="Jumlah diproses"
-        >
+      <p>Jumlah awal: ${person.total}</p>
 
-        <button onclick="updateAdminPerson(${person.id})">
-          Kurangi jumlah
-        </button>
+      <p>Sudah diproses: ${person.processed}</p>
 
-        <h4>Riwayat</h4>
+      <p>Sisa: <b>${remaining}</b></p>
 
-        ${
-          person.history.map(h => `
-            <p>
-              - ${h.amount} (${h.date})
-            </p>
-          `).join("")
-        }
+      <input
+        type="number"
+        id="process_${person.id}"
+        min="1"
+        max="${remaining}"
+        placeholder="Jumlah diproses"
+      >
 
-        <button
-          class="danger"
-          onclick="deleteAdminPerson(${person.id})"
-        >
-          Hapus
-        </button>
+      <button class="full"
+        onclick="updateAdminPerson(${person.id})">
+        Proses Pengurangan
+      </button>
 
-      </div>
+      <h4>Riwayat</h4>
+
+      <div class="history"></div>
+
+      <button class="danger full"
+        onclick="deleteAdminPerson(${person.id})">
+        Hapus Catatan
+      </button>
     `;
+
+    card.querySelector("h3").textContent = person.name;
+
+    const history = card.querySelector(".history");
+
+    person.history.forEach(h => {
+      const p = document.createElement("p");
+      p.textContent = `− ${h.amount} | ${h.date}`;
+      history.appendChild(p);
+    });
+
+    container.appendChild(card);
   });
 }
+  async function initAdminButton(){
+  if(await isAdmin()){
+    document.getElementById("adminButtonBox").style.display =
+      "block";
+  }
+}
+
+initAdminButton();
   checkUser();
 </script>
+  <div class="card" id="adminButtonBox"
+     style="margin-top:15px;display:none">
+
+  <button class="full" onclick="toggleAdmin()">
+    🔐 Administrasi
+  </button>
+
+  </div>
 </body>
 </html>
