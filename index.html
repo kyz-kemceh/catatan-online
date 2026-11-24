@@ -438,6 +438,439 @@ button:active {
     transition-duration: .01ms !important;
   }
 }
+  /* ===== MODERN DASHBOARD ===== */
+
+.dashboard{
+  max-width:780px;
+  margin:auto;
+  padding:5px 0 25px;
+}
+
+/* HERO */
+
+.dashboard-hero{
+  position:relative;
+  overflow:hidden;
+  min-height:210px;
+  padding:28px;
+  margin-bottom:22px;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    linear-gradient(125deg,rgba(35,65,130,.75),rgba(72,36,130,.42)),
+    rgba(255,255,255,.04);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  box-shadow:0 20px 55px rgba(0,0,0,.22);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+}
+
+.hero-label{
+  font-size:10px;
+  letter-spacing:3px;
+  color:#a5b4fc;
+  font-weight:700;
+  margin-bottom:15px;
+}
+
+.dashboard-hero h2{
+  font-size:32px;
+  line-height:1.15;
+  letter-spacing:-1.5px;
+  margin:0;
+  font-weight:750;
+}
+
+.dashboard-hero p{
+  color:#cbd5e1;
+  font-size:13px;
+  margin-top:12px;
+}
+
+.hero-icon{
+  position:absolute;
+  right:24px;
+  top:28px;
+  width:65px;
+  height:65px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  color:#dbeafe;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(15px);
+}
+
+.hero-icon svg{
+  width:32px;
+  height:32px;
+}
+
+.hero-decoration{
+  position:absolute;
+  width:200px;
+  height:200px;
+  right:-75px;
+  bottom:-110px;
+  border-radius:50%;
+  background:#818cf8;
+  filter:blur(75px);
+  opacity:.4;
+}
+
+/* PANELS */
+
+.glass-panel{
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.045);
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
+  border-radius:25px;
+  padding:23px;
+  margin-bottom:22px;
+  box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.panel-heading{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.panel-icon{
+  width:46px;
+  height:46px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+
+.panel-icon svg{
+  width:23px;
+  height:23px;
+}
+
+.blue-icon{
+  color:#93c5fd;
+  background:rgba(59,130,246,.15);
+  border:1px solid rgba(96,165,250,.18);
+}
+
+.modern-title{
+  font-size:20px;
+  font-weight:750;
+  letter-spacing:-.5px;
+  margin:0;
+}
+
+.modern-description{
+  color:#94a3b8;
+  font-size:13px;
+  line-height:1.6;
+  margin:5px 0 18px;
+}
+
+/* INPUT */
+
+.modern-input,
+.modern-textarea{
+  width:100%;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(3,7,18,.35);
+  color:#f8fafc;
+  border-radius:16px;
+  padding:16px;
+  font-size:14px;
+  transition:.25s;
+  outline:none;
+}
+
+.modern-input:focus,
+.modern-textarea:focus{
+  border-color:rgba(129,140,248,.65);
+  box-shadow:0 0 0 4px rgba(99,102,241,.10);
+  background:rgba(3,7,18,.5);
+}
+
+.modern-textarea{
+  min-height:170px;
+  line-height:1.8;
+  resize:vertical;
+  margin-top:10px;
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder{
+  color:#64748b;
+}
+
+/* BUTTONS */
+
+.editor-actions{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.glass-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  padding:13px 16px;
+  font-size:13px;
+  font-weight:650;
+  transition:all .2s ease;
+  cursor:pointer;
+}
+
+.glass-button svg{
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+}
+
+.glass-button:active{
+  transform:scale(.96);
+}
+
+.primary-modern{
+  color:white;
+  background:linear-gradient(120deg,#3b82f6,#6366f1,#8b5cf6);
+  box-shadow:0 6px 22px rgba(99,102,241,.22);
+  flex:1;
+}
+
+.subtle-button{
+  background:rgba(255,255,255,.05);
+  color:#cbd5e1;
+}
+
+/* NOTES */
+
+.notes-section{
+  margin-top:30px;
+}
+
+.notes-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.section-eyebrow{
+  color:#818cf8;
+  font-size:10px;
+  font-weight:750;
+  letter-spacing:2.5px;
+  display:block;
+  margin-bottom:8px;
+}
+
+.notes-symbol{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:rgba(129,140,248,.10);
+  border:1px solid rgba(129,140,248,.15);
+  color:#a5b4fc;
+}
+
+.notes-symbol svg{
+  width:22px;
+  height:22px;
+}
+
+/* NOTE CARDS */
+
+.note-card{
+  background:linear-gradient(
+    145deg,
+    rgba(255,255,255,.065),
+    rgba(255,255,255,.025)
+  ) !important;
+  border:1px solid rgba(255,255,255,.09) !important;
+  border-radius:20px !important;
+  padding:20px !important;
+  margin-bottom:14px !important;
+  backdrop-filter:blur(20px);
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.note-card::before{
+  height:2px;
+  background:linear-gradient(
+    90deg,
+    #60a5fa,
+    #a78bfa,
+    transparent
+  ) !important;
+}
+
+.note-title{
+  font-size:17px !important;
+  font-weight:700;
+  letter-spacing:-.3px;
+}
+
+.note{
+  font-size:13px !important;
+  color:#cbd5e1 !important;
+  line-height:1.8 !important;
+}
+
+.note-date{
+  font-size:11px !important;
+  color:#64748b !important;
+}
+
+.note-actions{
+  gap:6px;
+}
+
+/* DELETE */
+
+.danger-modern{
+  color:#fca5a5;
+  background:rgba(239,68,68,.07);
+  border:1px solid rgba(239,68,68,.18);
+}
+
+.danger-modern:hover{
+  background:rgba(239,68,68,.13);
+}
+
+.full{
+  width:100%;
+}
+
+/* ACCOUNT */
+
+.account-panel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:28px;
+  padding:17px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+}
+
+.account-info{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.account-icon{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.06);
+  color:#a5b4fc;
+}
+
+.account-icon svg{
+  width:22px;
+  height:22px;
+}
+
+.account-info strong{
+  font-size:13px;
+}
+
+.account-info p{
+  font-size:11px;
+  color:#64748b;
+  margin:4px 0 0;
+}
+
+.logout-modern{
+  color:#cbd5e1;
+  background:rgba(255,255,255,.045);
+}
+
+/* EMPTY NOTES */
+
+.empty{
+  padding:40px 15px !important;
+  border:1px dashed rgba(255,255,255,.12);
+  border-radius:20px;
+  color:#64748b;
+}
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+  .dashboard{
+    padding:0;
+  }
+
+  .dashboard-hero{
+    min-height:190px;
+    padding:23px;
+    border-radius:24px;
+  }
+
+  .dashboard-hero h2{
+    font-size:29px;
+  }
+
+  .hero-icon{
+    width:52px;
+    height:52px;
+    right:17px;
+    top:20px;
+    border-radius:17px;
+  }
+
+  .hero-icon svg{
+    width:25px;
+    height:25px;
+  }
+
+  .glass-panel{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .modern-textarea{
+    min-height:145px;
+  }
+
+  .editor-actions{
+    flex-direction:column;
+  }
+
+  .editor-actions button{
+    width:100%;
+  }
+
+  .account-panel{
+    padding:14px;
+  }
+
+  .logout-modern{
+    padding:11px;
+  }
+                  }
 </style>
 </head>
 <body>
@@ -469,72 +902,226 @@ button:active {
 </header>
   </main>
 <div id="status">Memuat...</div>
-<div id="login" class="card">
-<h2 class="section-title">Selamat datang ✨</h2><p class="description">Masuk ke ruang catatan pribadimu.</p>
-<input id="email" type="email" placeholder="Alamat email"><input id="password" type="password" placeholder="Password">
-<button class="primary full" onclick="login()">Masuk ke Akun →</button><button class="secondary full" onclick="showSignup()">✦ Buat Akun Baru</button><button class="secondary full" onclick="sendPasswordReset()">Lupa Password?</button>
+<div id="login" class="login-panel">
+
+  <div class="login-orb">
+    <svg viewBox="0 0 24 24" width="32" height="32"
+         fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M5 4.5h10a3 3 0 0 1 3 3v12H8a3 3 0 0 1-3-3z"/>
+      <path d="M8 4.5v12a3 3 0 0 0 3 3"/>
+      <path d="M9 9h5M9 12h5"/>
+    </svg>
+  </div>
+
+  <div class="login-heading">
+    <div class="login-eyebrow">PERSONAL SPACE</div>
+    <h2>Welcome<br>back<span>.</span></h2>
+    <p>Masuk ke ruang pribadi kamu.</p>
+  </div>
+
+  <div class="login-form">
+
+    <label class="login-label">EMAIL ADDRESS</label>
+
+    <div class="login-input-wrap">
+      <svg viewBox="0 0 24 24" width="19" height="19"
+           fill="none" stroke="currentColor"
+           stroke-width="1.7" stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="3"/>
+        <path d="m4 7 8 6 8-6"/>
+      </svg>
+
+      <input id="email" type="email"
+             placeholder="Alamat email">
+    </div>
+
+    <label class="login-label">PASSWORD</label>
+
+    <div class="login-input-wrap">
+      <svg viewBox="0 0 24 24" width="19" height="19"
+           fill="none" stroke="currentColor"
+           stroke-width="1.7" stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect x="4" y="10" width="16" height="11" rx="3"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        <path d="M12 14v3"/>
+      </svg>
+
+      <input id="password" type="password"
+             placeholder="Password">
+    </div>
+
+    <button class="login-main-button" onclick="login()">
+      <span>Sign In</span>
+      <span class="login-arrow">↗</span>
+    </button>
+
+    <button class="login-create-button" onclick="showSignup()">
+      Create an account
+    </button>
+
+    <button class="login-forgot-button" onclick="sendPasswordReset()">
+      Forgot password?
+    </button>
+
+  </div>
+
+  <div class="login-bottom">
+    <span class="login-bottom-dot"></span>
+    YOUR PRIVATE SPACE
+  </div>
+
 </div>
 <div id="signupBox" class="card"><h2 class="section-title">Buat akun baru ✦</h2><p class="description">Buat ruang pribadi untuk menyimpan catatanmu.</p>
 <input id="signupEmail" type="email" placeholder="Alamat email"><input id="signupPassword" type="password" placeholder="Buat password"><input id="signupConfirm" type="password" placeholder="Ulangi password">
 <button class="primary full" onclick="signup()">Daftar Sekarang →</button><button class="secondary full" onclick="showLogin()">← Kembali ke Login</button></div>
 <div id="resetBox" class="card"><h2 class="section-title">Password Baru 🔐</h2><p class="description">Buat password baru untuk akunmu.</p><input id="newPassword" type="password" placeholder="Password baru"><input id="confirmNewPassword" type="password" placeholder="Ulangi password baru"><button class="primary full" onclick="saveNewPassword()">Simpan Password Baru</button></div>
 <div id="app">
-<div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea><button class="primary" onclick="saveNote()">✦ Simpan Catatan</button><button class="secondary" onclick="cancelEdit()">Batal</button>
-<div class="card merge-card">
-  <h2 class="section-title">⚡ Generate Alamat Gmail</h2>
-  <p class="description">Buat Alamat Gmail Mu.</p>
+<div id="app">
 
-  <div style="display:flex;gap:10px;margin-bottom:15px">
-    <button id="modeFree" class="mode-button active"
-      onclick="showGenerateMode('free')">🎲 Bebas</button>
+  <div class="dashboard">
 
-    <button id="modeCustom" class="mode-button"
-      onclick="showGenerateMode('custom')">⚙️ Custom</button>
+    <!-- WELCOME -->
+    <div class="dashboard-hero">
+      <div class="hero-content">
+        <div class="hero-label">PERSONAL WORKSPACE</div>
+        <h2>Your space.<br>Your thoughts.</h2>
+        <p>Tempat menyimpan ide, cerita, dan hal penting.</p>
+      </div>
+
+      <div class="hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v18"/>
+          <path d="M5 7h14"/>
+          <path d="M5 17h14"/>
+          <circle cx="12" cy="7" r="3"/>
+          <circle cx="12" cy="17" r="3"/>
+        </svg>
+      </div>
+
+      <div class="hero-decoration"></div>
+    </div>
+
+    <!-- CREATE NOTE -->
+    <div class="glass-panel note-editor">
+
+      <div class="panel-heading">
+        <div class="panel-icon blue-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+          </svg>
+        </div>
+
+        <div>
+          <h2 class="modern-title">Catatan Baru</h2>
+          <p class="modern-description">Tuangkan apa yang ada di pikiranmu.</p>
+        </div>
+      </div>
+
+      <input id="title" placeholder="Beri judul catatan..." class="modern-input">
+
+      <textarea id="content"
+        placeholder="Mulai menulis sesuatu yang menarik..."
+        class="modern-textarea"></textarea>
+
+      <div class="editor-actions">
+        <button class="glass-button primary-modern" onclick="saveNote()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/>
+            <path d="M17 21v-8H7v8"/>
+            <path d="M7 3v5h8"/>
+          </svg>
+          Simpan Catatan
+        </button>
+
+        <button class="glass-button subtle-button" onclick="cancelEdit()">
+          Batal
+        </button>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="notes-section">
+
+      <div class="notes-heading">
+        <div>
+          <span class="section-eyebrow">YOUR COLLECTION</span>
+          <h2 class="modern-title">Semua Catatan</h2>
+        </div>
+
+        <div class="notes-symbol">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/>
+            <path d="M16 3h5v5"/>
+            <path d="m10 14 11-11"/>
+          </svg>
+        </div>
+      </div>
+
+      <p class="modern-description">
+        Semua catatan pribadi tersimpan di sini.
+      </p>
+
+      <div id="notes"></div>
+
+      <button class="glass-button danger-modern full"
+        onclick="deleteAllNotes()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18"/>
+          <path d="M8 6V4h8v2"/>
+          <path d="m19 6-1 14H6L5 6"/>
+          <path d="M10 11v5M14 11v5"/>
+        </svg>
+        Hapus Semua Catatan
+      </button>
+    </div>
+
+    <!-- ACCOUNT -->
+    <div class="account-panel">
+
+      <div class="account-info">
+        <div class="account-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M5 21a7 7 0 0 1 14 0"/>
+          </svg>
+        </div>
+
+        <div>
+          <strong>Account</strong>
+          <p>Keluar dari akun saat ini</p>
+        </div>
+      </div>
+
+      <button class="glass-button logout-modern" onclick="logout()">
+        Keluar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <path d="M16 17l5-5-5-5"/>
+          <path d="M21 12H9"/>
+        </svg>
+      </button>
+
+    </div>
+
   </div>
 
-  <div id="freeOptions" style="display:none;margin-top:15px">
-    <p class="description">Jumlah Gmail Yang Mau Di Create:</p>
-
-    <div style="display:flex;gap:8px">
-      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
-      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
-      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
-    </div>
-
-    <div id="freeGenerateButtons" style="display:none;margin-top:15px">
-      <p class="description">Variasi:</p>
-      <button class="primary full" onclick="generateFree(16)">⚡ Pendek (16 huruf)</button>
-      <button class="primary full" onclick="generateFree(20)">✨ Panjang (20 huruf)</button>
-    </div>
-  </div>
-
-  <div id="customOptions" style="display:none;margin-top:15px">
-    <p class="description">Jumlah Gmail Yang Mau Di Create:</p>
-
-    <div style="display:flex;gap:8px">
-      <button class="primary" onclick="chooseGenerateAmount(5)">5</button>
-      <button class="primary" onclick="chooseGenerateAmount(10)">10</button>
-      <button class="primary" onclick="chooseGenerateAmount(15)">15</button>
-    </div>
-
-    <div id="customGenerateButtons" style="display:none;margin-top:15px">
-      <input id="customSuffix" type="text" placeholder="Masukkan akhiran custom">
-
-      <button class="secondary full" onclick="saveCustomSuffix()">💾 Simpan Custom</button>
-      <button class="primary full" onclick="generateCustom(16)">⚡ Pendek (16 huruf)</button>
-      <button class="primary full" onclick="generateCustom(20)">✨ Panjang (20 huruf)</button>
-    </div>
-  </div>
-
-  <input id="generateAmount" type="hidden">
-  <div id="customStatus" class="description" style="margin-top:12px"></div>
 </div>
 
+<div class="footer">
+  Crafted with <span>✦</span> Jack
 </div>
-<div class="card merge-card"><h2 class="section-title">✦ Gabungkan semua teks email yang ada di catatanmu!</h2><p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p><button class="primary full" onclick="mergeAllGmail()">✦ Gabungkan semua teks email yang ada di catatanmu!</button><div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div><textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea><button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button><button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button><button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>
-<p class="description" style="margin-left:5px">Semua catatan pribadimu.</p><div id="notes"></div><button class="danger full" onclick="deleteAllNotes()">🗑️ Hapus Semua Catatan</button><button class="danger full" onclick="logout()">Keluar dari Akun</button>
-</div>
-<div class="footer">Designed with <span>✦</span> Jack</div>
 </main>
 <script>
 const SUPABASE_URL="https://rqjfekjvbrhsiwhmzwsb.supabase.co";
