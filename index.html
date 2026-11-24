@@ -1087,6 +1087,57 @@ function deleteSimulationData(id) {
   localStorage.setItem("simulationRecords", JSON.stringify(records));
   renderSimulationData();
 }
+  function renderRejectedData() {
+  const container = document.getElementById("rejectedList");
+  if (!container) return;
+
+  const data = JSON.parse(
+    localStorage.getItem("rejectedSimulationData") || "[]"
+  );
+
+  if (data.length === 0) {
+    container.innerHTML = "<p>Belum ada data.</p>";
+    return;
+  }
+
+  container.innerHTML = data.map((r, i) => `
+    <div class="card">
+      <p><b>${i + 1}.</b> ${escapeSimulationHTML(r.item || "")}</p>
+      <small>Nama: ${escapeSimulationHTML(r.owner || "-")}</small>
+      <small>Waktu: ${escapeSimulationHTML(r.date || "-")}</small>
+    </div>
+  `).join("");
+}
+
+
+function renderReductionHistory() {
+  const container = document.getElementById("reductionHistory");
+  if (!container) return;
+
+  const history = JSON.parse(
+    localStorage.getItem("simulationReductionHistory") || "[]"
+  );
+
+  if (history.length === 0) {
+    container.innerHTML = "<p>Belum ada riwayat.</p>";
+    return;
+  }
+
+  container.innerHTML = history.slice().reverse().map((h, i) => `
+    <div class="card">
+      <h4>Pengurangan #${history.length - i}</h4>
+      <p>Waktu: ${escapeSimulationHTML(h.date || "-")}</p>
+      <p>Jumlah input: ${h.totalInput || 0}</p>
+      <p>Data ditemukan: ${h.found ? h.found.length : 0}</p>
+      <p>Data tidak ditemukan: ${h.notFound ? h.notFound.length : 0}</p>
+    </div>
+  `).join("");
+}
+
+
+// Jalankan saat halaman dibuka
+renderRejectedData();
+renderReductionHistory();
 </script>
 </body>
   </html>
