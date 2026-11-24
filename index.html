@@ -756,7 +756,38 @@ initAdminButton();
 <button class="full" onclick="saveSimulationData()">
   + Simpan List Gmail 
 </button>
+<!-- PENGURANGAN DATA SIMULASI -->
+<div class="card">
+  <h3>🗑️ Pengurangan Data</h3>
 
+  <textarea
+    id="reductionInput"
+    rows="6"
+    placeholder="Masukkan data simulasi yang ingin dikurangi..."
+  ></textarea>
+
+  <p id="reductionCount">Jumlah data: 0</p>
+
+  <button class="danger" onclick="processReduction()">
+    Kurangi Data
+  </button>
+</div>
+
+<!-- DATA DITOLAK -->
+<div class="card">
+  <h3>📋 Data Ditolak</h3>
+  <div id="rejectedList">
+    <p>Belum ada data.</p>
+  </div>
+</div>
+
+<!-- RIWAYAT -->
+<div class="card">
+  <h3>📜 Riwayat Pengurangan</h3>
+  <div id="reductionHistory">
+    <p>Belum ada riwayat.</p>
+  </div>
+</div>
     <div id="adminList"></div>
 
   </div>
