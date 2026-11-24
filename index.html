@@ -109,7 +109,6 @@ button:active {
       <small>CREATED BY</small>
       <strong>✦ JACK ✦</strong>
     </div>
-
     <button
   id="adminButtonBox"
   onclick="openAdminPage()"
@@ -254,11 +253,28 @@ if(data.session){currentUser=data.user;alert("Pendaftaran berhasil!");showPage()
 else{alert("Pendaftaran berhasil. Silakan cek email jika konfirmasi diperlukan, lalu login.");document.getElementById("signupPassword").value="";document.getElementById("signupConfirm").value="";showLogin();}
 }
 async function login(){
-const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
-if(!email||!password)return alert("Isi email dan password terlebih dahulu.");
-const {data,error}=await db.auth.signInWithPassword({email,password});
-if(error)return alert(error.message);
-currentUser=data.user;showPage();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if(!email || !password)
+    return alert("Isi email dan password terlebih dahulu.");
+
+  const {data, error} = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if(error) return alert(error.message);
+
+  currentUser = data.user;
+  showPage();
+
+  const adminButton = document.getElementById("adminButtonBox");
+
+  if(adminButton){
+    adminButton.style.display =
+      isAdminEmail(currentUser.email) ? "inline-block" : "none";
+  }
 }
 async function sendPasswordReset(){
 const email=document.getElementById("email").value.trim();if(!email)return alert("Masukkan email akun terlebih dahulu.");
