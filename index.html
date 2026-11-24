@@ -909,7 +909,106 @@ function escapeSimulationHTML(value) {
   return div.innerHTML;
 }
 
+function processReduction() {
+  const input = document.getElementById("reductionInput");
 
+  const items = input.value
+    .split("\n")
+    .map(x => x.trim())
+    .filter(x => x !== "");
+
+  if (items.length === 0) {
+    alert("Masukkan data terlebih dahulu!");
+    return;
+  }
+
+  if (!confirm("Proses " + items.length + " data?")) {
+    return;
+  }
+
+  const records = JSON.parse(
+    localStorage.getItem("simulationRecords") || "[]"
+  );
+
+  const rejected = JSON.parse(
+    localStorage.getItem("rejectedSimulationData") || "[]"
+  );
+
+  const history = JSON.parse(
+    localStorage.getItem("simulationReductionHistory") || "[]"
+  );
+
+  const found = [];
+  const notFound = [];
+
+  items.forEach(item => {
+    let owner = null;
+    let index = -1;
+
+    for (const record of records) {
+      index = record.items.findIndex(
+        x => x.trim().toLowerCase() === item.toLowerCase()
+      );
+
+      if (index !== -1) {
+        owner = record;
+        break;
+      }
+    }
+
+    if (owner) {
+      const removed = owner.items.splice(index, 1)[0];
+      owner.total = owner.items.length;
+
+      const entry = {
+        item: removed,
+        owner: owner.name,
+        date: new Date().toLocaleString("id-ID")
+      };
+
+      found.push(entry);
+      rejected.push(entry);
+    } else {
+      notFound.push(item);
+    }
+  });
+
+  localStorage.setItem(
+    "simulationRecords",
+    JSON.stringify(records)
+  );
+
+  localStorage.setItem(
+    "rejectedSimulationData",
+    JSON.stringify(rejected)
+  );
+
+  history.unshift({
+    date: new Date().toLocaleString("id-ID"),
+    totalInput: items.length,
+    found: found,
+    notFound: notFound
+  });
+
+  localStorage.setItem(
+    "simulationReductionHistory",
+    JSON.stringify(history)
+  );
+
+  input.value = "";
+
+  document.getElementById("reductionCount").textContent =
+    "Jumlah data: 0";
+
+  renderSimulationData();
+  renderRejectedData();
+  renderReductionHistory();
+
+  alert(
+    "Selesai!\nData ditemukan: " + found.length +
+    "\nTidak ditemukan: " + notFound.length
+  );
+}
 
 function saveSimulationData() {
   const name = document.getElementById("adminName").value.trim();
