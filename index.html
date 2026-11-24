@@ -1138,6 +1138,19 @@ function renderReductionHistory() {
 // Jalankan saat halaman dibuka
 renderRejectedData();
 renderReductionHistory();
+  const reductionInput = document.getElementById("reductionInput");
+const reductionCount = document.getElementById("reductionCount");
+
+if (reductionInput && reductionCount) {
+  reductionInput.addEventListener("input", function() {
+    const total = this.value
+      .split("\n")
+      .map(x => x.trim())
+      .filter(x => x.length > 0).length;
+
+    reductionCount.textContent = "Jumlah data: " + total;
+  });
+}
 </script>
 </body>
   </html>
