@@ -668,6 +668,278 @@ button:active {
     font-size: 8px;
   }
   }
+  
+/* ===== NOTERA DASHBOARD DESIGN ===== */
+
+#app {
+  max-width: 760px;
+  margin: auto;
+  padding: 24px 16px 45px;
+}
+
+/* INTRO */
+
+#app .dashboard-intro {
+  padding: 20px 5px 27px;
+}
+
+#app .dashboard-eyebrow {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  font-weight: 700;
+  color: #9295aa;
+  margin-bottom: 13px;
+}
+
+#app .dashboard-intro h1 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin: 0;
+  color: #f2f2f6;
+}
+
+#app .dashboard-intro h1 span,
+#app .notes-heading h2 span {
+  color: #9da7db;
+}
+
+#app .dashboard-intro p {
+  color: #9698a7;
+  font-size: 13px;
+  margin-top: 9px;
+}
+
+/* CARD */
+
+#app .card {
+  background:
+    linear-gradient(145deg, #171821, #101117);
+  border: 1px solid rgba(255,255,255,.075);
+  border-radius: 21px;
+  padding: 21px;
+  margin-bottom: 17px;
+  box-shadow: 0 12px 35px rgba(0,0,0,.16);
+}
+
+#app .section-title {
+  color: #f0f0f5;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+#app .description {
+  color: #9395a4;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* INPUT */
+
+#app input,
+#app textarea {
+  width: 100%;
+  background: #0c0d13;
+  color: #ededf3;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 13px;
+  padding: 14px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  outline: none;
+  transition: .2s ease;
+}
+
+#app input:focus,
+#app textarea:focus {
+  border-color: #737da9;
+  box-shadow: 0 0 0 3px rgba(115,125,169,.1);
+}
+
+#app input::placeholder,
+#app textarea::placeholder {
+  color: #686b7b;
+}
+
+#app textarea {
+  min-height: 145px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+/* BUTTON */
+
+#app button {
+  border-radius: 12px;
+  font-weight: 600;
+  transition: .2s ease;
+}
+
+#app button.primary {
+  background: #e5e6ee;
+  color: #13141b;
+  border: none;
+}
+
+#app button.primary:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+#app button.secondary {
+  background: rgba(255,255,255,.045);
+  color: #d5d6e0;
+  border: 1px solid rgba(255,255,255,.09);
+}
+
+#app button.secondary:hover {
+  background: rgba(255,255,255,.08);
+}
+
+#app button.danger {
+  background: rgba(180,65,75,.10);
+  color: #e7a0a6;
+  border: 1px solid rgba(220,90,100,.18);
+}
+
+#app button.full {
+  width: 100%;
+}
+
+/* GENERATOR */
+
+#app .merge-card {
+  background:
+    radial-gradient(circle at top right, rgba(105,117,170,.10), transparent 50%),
+    linear-gradient(145deg, #171821, #101117);
+}
+
+#app .mode-button {
+  flex: 1;
+  padding: 11px 8px;
+  border-radius: 11px;
+  font-size: 12px;
+  background: #0c0d13;
+  color: #a4a6b5;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+#app .mode-button.active {
+  background: #e5e6ee;
+  color: #15151c;
+  border-color: transparent;
+}
+
+#app .amount-buttons {
+  display: flex;
+  gap: 9px;
+}
+
+#app .amount-buttons button {
+  flex: 1;
+  min-height: 42px;
+}
+
+#app #freeGenerateButtons button,
+#app #customGenerateButtons button {
+  margin-bottom: 9px;
+}
+
+/* MERGE RESULT */
+
+#app #mergeResult {
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+
+#app #mergeCount {
+  margin-bottom: 10px;
+}
+
+/* NOTES */
+
+#app .notes-heading {
+  padding: 18px 5px 12px;
+}
+
+#app .notes-heading h2 {
+  font-size: 25px;
+  letter-spacing: -1px;
+  color: #f1f1f5;
+  margin: 0;
+}
+
+#app #notes .card {
+  background: #14151c;
+  border-radius: 16px;
+  padding: 17px;
+}
+
+#app #notes button {
+  margin-top: 7px;
+}
+
+/* DELETE & LOGOUT */
+
+#app > button.danger.full {
+  margin-top: 10px;
+}
+
+#app .logout-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 13px;
+  border-radius: 12px;
+  background: transparent;
+  color: #9698a7;
+  border: 1px solid rgba(255,255,255,.09);
+}
+
+/* FOOTER */
+
+#app + .footer {
+  padding: 25px 10px;
+  color: #737585;
+  font-size: 12px;
+  text-align: center;
+}
+
+#app + .footer span {
+  color: #aab2e0;
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+
+  #app {
+    padding: 16px 12px 35px;
+  }
+
+  #app .dashboard-intro {
+    padding: 17px 4px 22px;
+  }
+
+  #app .dashboard-intro h1 {
+    font-size: 30px;
+  }
+
+  #app .card {
+    padding: 17px;
+    border-radius: 18px;
+  }
+
+  #app .section-title {
+    font-size: 15px;
+  }
+
+  #app input,
+  #app textarea {
+    font-size: 14px;
+  }
+
+  }
 </style>
 </head>
 <body>
