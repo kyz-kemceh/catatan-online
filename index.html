@@ -782,6 +782,9 @@ initAdminButton();
 <!-- RIWAYAT -->
 <div class="card">
   <h3>📜 Riwayat Pengurangan</h3>
+  <button class="danger" onclick="clearAllReductionHistory()">
+  🗑️ Hapus Semua Riwayat
+  </button>
   <div id="reductionHistory">
     <p>Belum ada riwayat.</p>
   </div>
@@ -1155,6 +1158,19 @@ renderReductionHistory();
   input.addEventListener("input", updateCount);
   updateCount();
 });
+  function clearAllReductionHistory() {
+  if (!confirm("Yakin ingin menghapus semua Data Ditolak dan Riwayat Pengurangan?")) {
+    return;
+  }
+
+  localStorage.removeItem("rejectedSimulationData");
+  localStorage.removeItem("simulationReductionHistory");
+
+  renderRejectedData();
+  renderReductionHistory();
+
+  alert("Semua riwayat berhasil dihapus!");
+  }
 </script>
 </body>
   </html>
