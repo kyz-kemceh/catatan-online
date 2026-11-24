@@ -238,6 +238,14 @@ document.getElementById("resetBox").style.display=recoveryMode?"block":"none";
 document.getElementById("app").style.display=currentUser&&!recoveryMode?"block":"none";
 document.querySelector("header").style.display =
   currentUser && !recoveryMode ? "flex" : "none";
+  const adminButton = document.getElementById("adminButtonBox");
+
+if(adminButton){
+  adminButton.style.display =
+    currentUser && !recoveryMode && isAdminEmail(currentUser.email)
+      ? "inline-block"
+      : "none";
+}
 if(currentUser&&!recoveryMode)loadNotes();
 }
 function showSignup(){document.getElementById("login").style.display="none";document.getElementById("signupBox").style.display="block";}
@@ -266,26 +274,24 @@ async function login(){
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
 
-  if(!email || !password)
-    return alert("Isi email dan password terlebih dahulu.");
+  if(!email || !password){
+    alert("Isi email dan password terlebih dahulu.");
+    return;
+  }
 
   const {data, error} = await db.auth.signInWithPassword({
     email,
     password
   });
 
-  if(error) return alert(error.message);
+  if(error){
+    alert(error.message);
+    return;
+  }
 
   currentUser = data.user;
-await initAdminButton();
-showPage();
 
-  const adminButton = document.getElementById("adminButtonBox");
-
-  if(adminButton){
-    adminButton.style.display =
-      isAdminEmail(currentUser.email) ? "inline-block" : "none";
-  }
+  showPage();
 }
 async function sendPasswordReset(){
 const email=document.getElementById("email").value.trim();if(!email)return alert("Masukkan email akun terlebih dahulu.");
