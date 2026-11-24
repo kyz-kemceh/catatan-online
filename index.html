@@ -195,11 +195,14 @@ const SUPABASE_KEY="sb_publishable_HT_sp5dadZB_8CTGKdl4hw_yb07PgCi";
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null,editingId=null,recoveryMode=false;
 function openAdminPage(){
-
   if(!currentUser){
     alert("Silakan login terlebih dahulu!");
     return;
   }
+
+  // Pemeriksaan akses admin harus dilakukan sebelum membuka panel.
+  // Bagian tampilan panel data dummy tetap dipisahkan dari pemeriksaan akses.
+}
 
   if(!isAdminEmail(currentUser.email)){
 
