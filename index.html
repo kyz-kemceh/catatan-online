@@ -249,6 +249,16 @@ if(error)return alert(error.message);
 if(data.session){currentUser=data.user;alert("Pendaftaran berhasil!");showPage();}
 else{alert("Pendaftaran berhasil. Silakan cek email jika konfirmasi diperlukan, lalu login.");document.getElementById("signupPassword").value="";document.getElementById("signupConfirm").value="";showLogin();}
 }
+  async function initAdminButton(){
+  const adminButton = document.getElementById("adminButtonBox");
+
+  if(!adminButton) return;
+
+  adminButton.style.display =
+    currentUser && isAdminEmail(currentUser.email)
+      ? "inline-block"
+      : "none";
+  }
 async function login(){
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
@@ -265,6 +275,7 @@ async function login(){
 
   currentUser = data.user;
   showPage();
+  await initAdminButton();
 
   const adminButton = document.getElementById("adminButtonBox");
 
