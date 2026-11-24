@@ -222,21 +222,13 @@ function closeAdminPage(){
   document.getElementById("app").style.display = "block";
 }
 async function checkUser(){
-  const {data:{session}}=await db.auth.getSession();
+  const {data:{session}} = await db.auth.getSession();
 
   currentUser = session?.user || null;
 
   showPage();
 
-  const adminButton = document.getElementById("adminButtonBox");
-
-  if(adminButton){
-    adminButton.style.display = "none";
-  }
-
-  if(currentUser){
-    await initAdminButton();
-  }
+  await initAdminButton();
 }
 function showPage(){
 document.getElementById("status").style.display=currentUser||recoveryMode?"none":"block";
