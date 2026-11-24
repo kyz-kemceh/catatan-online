@@ -856,10 +856,17 @@ function escapeSimulationHTML(value) {
   return div.innerHTML;
 }
 
+
 function saveSimulationData() {
   const name = document.getElementById("adminName").value.trim();
+  const input = document.getElementById("adminListInput");
 
-  const items = adminInput.value
+  if (!input) {
+    alert("Kolom data tidak ditemukan!");
+    return;
+  }
+
+  const items = input.value
     .split("\n")
     .map(x => x.trim())
     .filter(x => x.length > 0);
@@ -874,26 +881,34 @@ function saveSimulationData() {
     return;
   }
 
-  const records = JSON.parse(
-    localStorage.getItem("simulationRecords") || "[]"
-  );
+  try {
+    const records = JSON.parse(
+      localStorage.getItem("simulationRecords") || "[]"
+    );
 
-  records.push({
-    id: Date.now(),
-    name: name,
-    items: items,
-    total: items.length
-  });
+    records.push({
+      id: Date.now(),
+      name: name,
+      items: items,
+      total: items.length
+    });
 
-  localStorage.setItem("simulationRecords", JSON.stringify(records));
+    localStorage.setItem(
+      "simulationRecords",
+      JSON.stringify(records)
+    );
 
-  document.getElementById("adminName").value = "";
-  adminInput.value = "";
-  document.getElementById("adminCountPreview").textContent =
-    "Jumlah data: 0";
+    document.getElementById("adminName").value = "";
+    input.value = "";
 
-  renderSimulationData();
-  alert("Data simulasi berhasil disimpan!");
+    updateSimulationCount();
+    renderSimulationData();
+
+    alert("Data simulasi berhasil disimpan!");
+
+  } catch (error) {
+    alert("Gagal menyimpan data: " + error.message);
+  }
 }
 
 function renderSimulationData() {
