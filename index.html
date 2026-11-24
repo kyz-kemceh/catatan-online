@@ -934,6 +934,252 @@ function deleteSimulationData(id) {
   localStorage.setItem("simulationRecords", JSON.stringify(records));
   renderSimulationData();
 }
+  // ================================
+// PENGURANGAN DATA SIMULASI
+// ================================
+
+const reductionInput = document.getElementById("reductionInput");
+
+reductionInput.addEventListener("input", function() {
+  const items = this.value
+    .split("\n")
+    .map(x => x.trim())
+    .filter(x => x.length > 0);
+
+  document.getElementById("reductionCount").textContent =
+    "Jumlah data: " + items.length;
+});
+
+
+function processReduction() {
+  const input = document.getElementById("reductionInput");
+
+  const items = input.value
+    .split("\n")
+    .map(x => x.trim())
+    .filter(x => x.length > 0);
+
+  if (items.length === 0) {
+    alert("Masukkan data terlebih dahulu!");
+    return;
+  }
+
+  // Hanya menerima data dummy, bukan alamat email
+  if (items.some(x => x.includes("@"))) {
+    alert("Fitur ini hanya untuk data simulasi dummy.");
+    return;
+  }
+
+  if (!confirm("Proses pengurangan " + items.length + " data?")) {
+    return;
+  }
+
+  let records = JSON.parse(
+    localStorage.getItem("simulationRecords") || "[]"
+  );
+
+  let rejected = JSON.parse(
+    localStorage.getItem("rejectedSimulationData") || "[]"
+  );
+
+  let history = JSON.parse(
+    localStorage.getItem("simulationReductionHistory") || "[]"
+  );
+
+  const found = [];
+  const notFound = [];
+
+  items.forEach(item => {
+    const search = item.toLowerCase();
+
+    let ownerRecord = null;
+    let itemIndex = -1;
+
+    // Cari data di seluruh penyimpanan simulasi
+    for (const record of records) {
+      const index = record.items.findIndex(
+        x => x.trim().toLowerCase() === search
+      );
+
+      if (index !== -1) {
+        ownerRecord = record;
+        itemIndex = index;
+        break;
+      }
+    }
+
+    if (ownerRecord) {
+      const removedItem = ownerRecord.items.splice(itemIndex, 1)[0];
+
+      ownerRecord.total = ownerRecord.items.length;
+
+      const entry = {
+        item: removedItem,
+        owner: ownerRecord.name,
+        date: new Date().toLocaleString("id-ID")
+      };
+
+      found.push(entry);
+      rejected.push(entry);
+    } else {
+      notFound.push(item);
+    }
+  });
+
+  // Simpan storage terbaru
+  localStorage.setItem(
+    "simulationRecords",
+    JSON.stringify(records)
+  );
+
+  localStorage.setItem(
+    "rejectedSimulationData",
+    JSON.stringify(rejected)
+  );
+
+  // Simpan riwayat
+  history.unshift({
+    id: Date.now(),
+    date: new Date().toLocaleString("id-ID"),
+    totalInput: items.length,
+    found: found,
+    notFound: notFound
+  });
+
+  localStorage.setItem(
+    "simulationReductionHistory",
+    JSON.stringify(history)
+  );
+
+  input.value = "";
+
+  document.getElementById("reductionCount").textContent =
+    "Jumlah data: 0";
+
+  updateSimulationCount();
+  renderSimulationData();
+  renderRejectedData();
+  renderReductionHistory();
+
+  alert(
+    "Pengurangan selesai!\n\n" +
+    "Data ditemukan: " + found.length +
+    "\nData tidak ditemukan: " + notFound.length
+  );
+}
+
+
+// ================================
+// TAMPILKAN DATA DITOLAK
+// ================================
+
+function renderRejectedData() {
+  const container = document.getElementById("rejectedList");
+
+  const rejected = JSON.parse(
+    localStorage.getItem("rejectedSimulationData") || "[]"
+  );
+
+  if (rejected.length === 0) {
+    container.innerHTML = "<p>Belum ada data.</p>";
+    return;
+  }
+
+  container.innerHTML = rejected.map((r, i) => `
+    <div style="
+      padding:10px;
+      margin-bottom:8px;
+      background:#171326;
+      border-radius:10px;
+    ">
+      <b>${i + 1}. ${escapeSimulationHTML(r.item)}</b>
+      <p>Pemilik: ${escapeSimulationHTML(r.owner)}</p>
+      <small>${escapeSimulationHTML(r.date)}</small>
+    </div>
+  `).join("");
+}
+
+
+// ================================
+// TAMPILKAN RIWAYAT
+// ================================
+
+function renderReductionHistory() {
+  const container = document.getElementById("reductionHistory");
+
+  const history = JSON.parse(
+    localStorage.getItem("simulationReductionHistory") || "[]"
+  );
+
+  if (history.length === 0) {
+    container.innerHTML = "<p>Belum ada riwayat.</p>";
+    return;
+  }
+
+  container.innerHTML = history.map((h, i) => `
+    <div class="card">
+      <h3>Riwayat #${history.length - i}</h3>
+
+      <p>Tanggal: ${escapeSimulationHTML(h.date)}</p>
+      <p>Total input: ${h.totalInput}</p>
+      <p>Ditemukan: ${h.found.length}</p>
+      <p>Tidak ditemukan: ${h.notFound.length}</p>
+
+      <details>
+        <summary>Lihat data yang dikurangi</summary>
+
+        ${h.found.map(r => `
+          <div style="padding:6px">
+            ${escapeSimulationHTML(r.item)}
+            — Pemilik: ${escapeSimulationHTML(r.owner)}
+          </div>
+        `).join("")}
+      </details>
+
+      <details>
+        <summary>Lihat data yang tidak ditemukan</summary>
+
+        ${h.notFound.map(r => `
+          <div style="padding:6px">
+            ${escapeSimulationHTML(r)}
+          </div>
+        `).join("")}
+      </details>
+    </div>
+  `).join("");
+}
+
+
+// Jalankan saat halaman dibuka
+renderRejectedData();
+renderReductionHistory();
 </script>
+  <div class="card" style="margin-top:20px">
+  <h2>🗑️ Pengurangan Data Simulasi</h2>
+  <p>Masukkan data dummy yang ingin dikurangi.</p>
+
+  <textarea
+    id="reductionInput"
+    placeholder="Masukkan data yang ingin dikurangi..."
+    rows="8"
+    style="width:100%;"
+  ></textarea>
+
+  <p id="reductionCount">Jumlah data: 0</p>
+
+  <button class="danger" onclick="processReduction()">
+    Kurangi Data
+  </button>
+</div>
+
+<div class="card">
+  <h2>📋 Data Simulasi Ditolak</h2>
+  <div id="rejectedList"></div>
+</div>
+
+<div class="card">
+  <h2>📜 Riwayat Pengurangan</h2>
+  <div id="reductionHistory"></div>
+</div>
 </body>
   </html>
