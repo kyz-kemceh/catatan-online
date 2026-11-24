@@ -856,37 +856,72 @@ function escapeSimulationHTML(value) {
 }
 
 
+
 function saveSimulationData() {
-  alert("Fungsi simpan berhasil dijalankan!");
+  const name = document.getElementById("adminName").value.trim();
+  const input = document.getElementById("adminListInput");
 
-  try {
-    localStorage.setItem("testAdmin", "BERHASIL");
+  const items = input.value
+    .split("\n")
+    .map(x => x.trim())
+    .filter(x => x.length > 0);
 
-    alert(
-      "Tes penyimpanan: " +
-      localStorage.getItem("testAdmin")
-    );
-  } catch (error) {
-    alert("Error: " + error.message);
+  if (!name || items.length === 0) {
+    alert("Nama dan data wajib diisi!");
+    return;
   }
-}
 
-function renderSimulationData() {
   const records = JSON.parse(
     localStorage.getItem("simulationRecords") || "[]"
   );
 
-  document.getElementById("adminList").innerHTML =
-    records.map(r => `
-      <div class="card">
-        <h3>${escapeSimulationHTML(r.name)}</h3>
-        <p>Jumlah data: ${r.total}</p>
-        <button class="danger"
-          onclick="deleteSimulationData(${r.id})">
-          Hapus Data
-        </button>
+  records.push({
+    id: Date.now(),
+    name: name,
+    items: items,
+    total: items.length
+  });
+
+  localStorage.setItem(
+    "simulationRecords",
+    JSON.stringify(records)
+  );
+
+  document.getElementById("adminName").value = "";
+  input.value = "";
+
+  updateSimulationCount();
+  renderSimulationData();
+
+  alert("Data berhasil disimpan!");
+}
+
+function renderSimulationData() {
+  const container = document.getElementById("adminList");
+
+  const records = JSON.parse(
+    localStorage.getItem("simulationRecords") || "[]"
+  );
+
+  container.innerHTML = records.map(r => `
+    <div class="card">
+      <h3>${escapeSimulationHTML(r.name)}</h3>
+      <p>Jumlah data: ${r.total}</p>
+
+      <div style="background:#171326;padding:10px;border-radius:10px;margin-top:10px">
+        ${r.items.map((item, index) => `
+          <div style="padding:5px 0;border-bottom:1px solid #393044">
+            ${index + 1}. ${escapeSimulationHTML(item)}
+          </div>
+        `).join("")}
       </div>
-    `).join("");
+
+      <button class="danger"
+        onclick="deleteSimulationData(${r.id})">
+        Hapus Data
+      </button>
+    </div>
+  `).join("");
 }
 
 function deleteSimulationData(id) {
