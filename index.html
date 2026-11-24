@@ -770,7 +770,12 @@ initAdminButton();
     Kurangi Data
   </button>
 </div>
-
+  <!-- TOMBOL HAPUS RIWAYAT -->
+<div class="card">
+  <button class="danger" onclick="clearAllReductionHistory()">
+    🗑️ Hapus Semua Riwayat
+  </button>
+</div>
 <!-- DATA DITOLAK -->
 <div class="card">
   <h3>📋 Data Ditolak</h3>
@@ -782,9 +787,6 @@ initAdminButton();
 <!-- RIWAYAT -->
 <div class="card">
   <h3>📜 Riwayat Pengurangan</h3>
-  <button class="danger" onclick="clearAllReductionHistory()">
-  🗑️ Hapus Semua Riwayat
-  </button>
   <div id="reductionHistory">
     <p>Belum ada riwayat.</p>
   </div>
