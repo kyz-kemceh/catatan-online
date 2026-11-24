@@ -1138,19 +1138,23 @@ function renderReductionHistory() {
 // Jalankan saat halaman dibuka
 renderRejectedData();
 renderReductionHistory();
-  const reductionInput = document.getElementById("reductionInput");
-const reductionCount = document.getElementById("reductionCount");
+  document.addEventListener("DOMContentLoaded", function() {
+  const input = document.getElementById("reductionInput");
+  const count = document.getElementById("reductionCount");
 
-if (reductionInput && reductionCount) {
-  reductionInput.addEventListener("input", function() {
-    const total = this.value
-      .split("\n")
-      .map(x => x.trim())
-      .filter(x => x.length > 0).length;
+  if (!input || !count) return;
 
-    reductionCount.textContent = "Jumlah data: " + total;
-  });
-}
+  function updateCount() {
+    const total = input.value
+      .split(/\r?\n/)
+      .filter(line => line.trim() !== "").length;
+
+    count.innerText = "Jumlah data: " + total;
+  }
+
+  input.addEventListener("input", updateCount);
+  updateCount();
+});
 </script>
 </body>
   </html>
