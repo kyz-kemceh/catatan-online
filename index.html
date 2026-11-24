@@ -175,7 +175,7 @@ button:active {
       <input id="customSuffix" type="text" placeholder="Masukkan akhiran custom">
 
       <button class="secondary full" onclick="saveCustomSuffix()">💾 Simpan Custom</button>
-      <button class="primary full" onclick="generateCustom(12)">⚡ Pendek (12 huruf)</button>
+      <button class="primary full" onclick="generateCustom(12)">⚡ Pendek (16 huruf)</button>
       <button class="primary full" onclick="generateCustom(20)">✨ Panjang (20 huruf)</button>
     </div>
   </div>
@@ -356,7 +356,7 @@ function saveCustomSuffix(){
   alert("Akhiran tersimpan: " + s);
 }
 function demoAmount(){const n=Number(document.getElementById("generateAmount").value);if(![5,10,15].includes(n)){alert("Pilih jumlah 5, 10, atau 15 terlebih dahulu.");return null;}return n;}
-function makeDemoNames(amount, length, suffix = ""){
+function makeDemoNames(amount, length = 16, suffix = ""){
   const vowels = "aiueo";
   const consonants = "bcdfghjklmnpqrstvwxyz";
 
