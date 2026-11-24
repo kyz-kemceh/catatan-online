@@ -277,8 +277,8 @@ async function login(){
   if(error) return alert(error.message);
 
   currentUser = data.user;
-  showPage();
-  await initAdminButton();
+await initAdminButton();
+showPage();
 
   const adminButton = document.getElementById("adminButtonBox");
 
