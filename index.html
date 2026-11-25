@@ -819,77 +819,41 @@ button:active {
 </header>
   </main>
 <div id="status">Memuat...</div>
-
 <div id="login" class="login-panel">
 
-  <div class="login-top">
-    <span class="login-brand-mark">J</span>
-    <span class="login-brand-name">JACK GMAIL TOOLS</span>
-    <span class="login-status">PRIVATE</span>
+  <h2>Masuk</h2>
+  <p class="login-description">Masuk ke akun kamu.</p>
+
+  <div class="login-fields">
+
+    <div class="login-field">
+      <label>EMAIL</label>
+      <input id="email" type="email" placeholder="Masukkan email">
+    </div>
+
+    <div class="login-field">
+      <label>PASSWORD</label>
+      <input id="password" type="password" placeholder="Masukkan password">
+    </div>
+
   </div>
 
-  <div class="login-content">
+  <button class="login-main-button" onclick="login()">
+    Masuk
+  </button>
 
-    <div class="login-small-title">
-      <span class="login-line"></span>
-      PERSONAL WORKSPACE
-    </div>
-
-    <h2 class="login-title">
-      Your space.<br>
-      Your thoughts.
-    </h2>
-
-    <p class="login-description">
-      Tempat menyimpan ide, catatan,<br>
-      dan hal-hal yang berarti.
-    </p>
-
-    <div class="login-fields">
-
-      <div class="login-field">
-        <label for="email">EMAIL</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="Masukkan email"
-        >
-      </div>
-
-      <div class="login-field">
-        <label for="password">PASSWORD</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Masukkan password"
-        >
-      </div>
-
-    </div>
-
-    <button class="login-main-button" onclick="login()">
-      <span>Masuk ke ruangmu</span>
-      <span class="login-arrow">↗</span>
+  <div class="login-actions">
+    <button class="login-create-button" onclick="showSignup()">
+      Buat akun baru
     </button>
 
-    <div class="login-actions">
-      <button class="login-create-button" onclick="showSignup()">
-        Buat akun baru
-      </button>
-
-      <button class="login-forgot-button" onclick="sendPasswordReset()">
-        Lupa password?
-      </button>
-    </div>
-
-  </div>
-
-  <div class="login-footer">
-    <span>© Jack tools</span>
-    <span>PERSONAL NOTES · 2026</span>
+    <button class="login-forgot-button" onclick="sendPasswordReset()">
+      Lupa password?
+    </button>
   </div>
 
 </div>
+
 <div id="signupBox" class="card"><h2 class="section-title">Buat akun baru ✦</h2><p class="description">Buat ruang pribadi untuk menyimpan catatanmu.</p>
 <input id="signupEmail" type="email" placeholder="Alamat email"><input id="signupPassword" type="password" placeholder="Buat password"><input id="signupConfirm" type="password" placeholder="Ulangi password">
 <button class="primary full" onclick="signup()">Daftar Sekarang →</button><button class="secondary full" onclick="showLogin()">← Kembali ke Login</button></div>
