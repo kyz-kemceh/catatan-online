@@ -860,15 +860,19 @@ button:active {
 <div id="resetBox" class="card"><h2 class="section-title">Password Baru 🔐</h2><p class="description">Buat password baru untuk akunmu.</p><input id="newPassword" type="password" placeholder="Password baru"><input id="confirmNewPassword" type="password" placeholder="Ulangi password baru"><button class="primary full" onclick="saveNewPassword()">Simpan Password Baru</button></div>
 
 <div id="app">  
-<div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea><button class="primary" onclick="saveNote()">✦ Simpan Catatan</button><button class="secondary" onclick="cancelEdit()">Batal</button>  
+<div class="card"><h2 class="section-title">✦ Tulis sesuatu</h2><p class="description">Simpan catatan pribadi yang ingin kamu ingat.</p><input id="title" placeholder="Judul catatan"><textarea id="content" placeholder="Mulai menulis sesuatu..."></textarea>
+   <button class="primary" onclick="saveNote()">✦ Simpan Catatan</button>
+   <button class="secondary" onclick="cancelEdit()">Batal</button></div>
 <div class="card merge-card">  
   <h2 class="section-title">⚡ Generate Alamat Gmail</h2>  
-  <p class="description">Buat Alamat Gmail Mu.</p>    <div style="display:flex;gap:10px;margin-bottom:15px">  
+  <p class="description">Buat Alamat Gmail Mu.</p>   
+   <div style="display:flex;gap:10px;margin-bottom:15px">  
     <button id="modeFree" class="mode-button active"  
       onclick="showGenerateMode('free')">🎲 Bebas</button>  <button id="modeCustom" class="mode-button"  
   onclick="showGenerateMode('custom')">⚙️ Custom</button>
 
-  </div>    <div id="freeOptions" style="display:none;margin-top:15px">  
+  </div>   
+   <div id="freeOptions" style="display:none;margin-top:15px">  
     <p class="description">Jumlah Gmail Yang Mau Di Create:</p>  <div style="display:flex;gap:8px">  
   <button class="primary" onclick="chooseGenerateAmount(5)">5</button>  
   <button class="primary" onclick="chooseGenerateAmount(10)">10</button>  
@@ -899,8 +903,13 @@ button:active {
   </div>    <input id="generateAmount" type="hidden">  
   <div id="customStatus" class="description" style="margin-top:12px"></div>  
 </div>  </div>  
-<div class="card merge-card"><h2 class="section-title">✦ Gabungkan semua teks email yang ada di catatanmu!</h2><p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p><button class="primary full" onclick="mergeAllGmail()">✦ Gabungkan semua teks email yang ada di catatanmu!</button><div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div><textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea><button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button><button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button><button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>  
-<p class="description" style="margin-left:5px">Semua catatan pribadimu.</p><div id="notes"></div><button class="danger full" onclick="deleteAllNotes()">🗑️ Hapus Semua Catatan</button><button class="danger full" onclick="logout()">Keluar dari Akun</button>  
+<div class="card merge-card"><h2 class="section-title">✦ Gabungkan semua teks email yang ada di catatanmu!</h2><p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p>
+   <button class="primary full" onclick="mergeAllGmail()">✦ Gabungkan semua teks email yang ada di catatanmu!</button>
+   <div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div><textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea>
+      <button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button><button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button><button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>  
+<p class="description" style="margin-left:5px">Semua catatan pribadimu.</p><div id="notes"></div>
+   <button class="danger full" onclick="deleteAllNotes()">🗑️ Hapus Semua Catatan</button>
+   <button class="danger full" onclick="logout()">Keluar dari Akun</button>  
 </div>  
 <div class="footer">Designed with <span>✦</span> Jack</div>  
 </main>
