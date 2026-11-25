@@ -445,53 +445,107 @@ button:active {
   align-items: center;
   justify-content: space-between;
 
+
+/* ===== SIMPLE LOGIN ===== */
+
+#login.login-panel {
+  width: calc(100% - 32px);
+  max-width: 390px;
+  margin: 45px auto;
+  padding: 25px;
+
+  background: #111827;
+  border: 1px solid #263246;
+  border-radius: 18px;
+
+  box-shadow: 0 18px 50px rgba(0,0,0,.28);
+}
+
+#login h2 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 750;
+  color: #f8fafc;
+}
+
+#login .login-description {
+  margin: 8px 0 25px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+#login .login-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+#login .login-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #9caec5;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+#login .login-field input {
+  width: 100%;
+  height: 49px;
+  margin: 0;
+  padding: 0 14px;
+
+  background: #0b1220;
   color: white;
-  background: linear-gradient(120deg,#287bd9,#459cff);
-  border: 1px solid rgba(147,197,253,.45);
-  border-radius: 14px;
+
+  border: 1px solid #29364b;
+  border-radius: 11px;
+  font-size: 14px;
 }
 
-.login-arrow {
-  width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: rgba(255,255,255,.15);
+#login .login-field input:focus {
+  border-color: #438ff6;
+  box-shadow: 0 0 0 2px #438ff622;
 }
 
-.login-actions {
+#login .login-main-button {
+  width: 100%;
+  height: 49px;
+  margin: 20px 0 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #347ff0;
+  color: white;
+  border: none;
+  border-radius: 11px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#login .login-actions {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
-  margin-top: 12px;
+  margin-top: 15px;
 }
 
-.login-create-button,
-.login-forgot-button {
+#login .login-create-button,
+#login .login-forgot-button {
+  margin: 0;
+  padding: 5px 0;
   background: transparent;
   border: none;
-  padding: 8px 0;
-  margin: 0;
-  color: #9eb0c9;
-  font-size: 11px;
+  color: #9eb5d5;
+  font-size: 12px;
 }
 
-.login-create-button:hover,
-.login-forgot-button:hover {
-  color: white;
-}
-
-.login-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 28px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  color: #73839c;
-  font-size: 8px;
-  letter-spacing: 1px;
+@media(max-width:480px) {
+  #login.login-panel {
+    margin: 28px auto;
+    padding: 22px;
+  }
 }
 
 /* SIGNUP & RESET */
