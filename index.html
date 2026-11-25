@@ -366,124 +366,6 @@ button:active {
   margin: 7px 0;
 }
 
-/* LOGIN */
-
-#login.login-panel {
-  width: calc(100% - 30px);
-  max-width: 440px;
-  margin: 35px auto;
-  padding: 27px 23px;
-
-  background: linear-gradient(
-    145deg,
-    rgba(255,255,255,.09),
-    rgba(255,255,255,.025)
-  );
-
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 25px;
-
-  box-shadow:
-    0 25px 65px rgba(0,0,0,.3),
-    inset 0 1px rgba(255,255,255,.12);
-
-  backdrop-filter: blur(30px) saturate(160%);
-  -webkit-backdrop-filter: blur(30px) saturate(160%);
-}
-
-.login-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 38px;
-}
-
-.login-brand-mark {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(135deg,#3184e8,#7766d9);
-  font-weight: 800;
-}
-
-.login-brand-name {
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 1.5px;
-}
-
-.login-status {
-  margin-left: auto;
-  padding: 5px 9px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  color: #9fb9dc;
-  font-size: 9px;
-  letter-spacing: 1px;
-}
-
-.login-small-title {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #78b8ff;
-  font-size: 10px;
-  letter-spacing: 2px;
-  margin-bottom: 15px;
-}
-
-.login-line {
-  width: 20px;
-  height: 1px;
-  background: #60a5fa;
-}
-
-.login-title {
-  margin: 0;
-  font-size: clamp(32px,8vw,42px);
-  line-height: 1.13;
-  letter-spacing: -1.5px;
-}
-
-.login-description {
-  color: #a0aec3;
-  font-size: 13px;
-  line-height: 1.8;
-  margin: 16px 0 27px;
-}
-
-.login-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-.login-field label {
-  display: block;
-  color: #a1b3cb;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  margin-bottom: 7px;
-}
-
-.login-field input {
-  height: 52px;
-  margin: 0;
-}
-
-.login-main-button {
-  width: 100%;
-  height: 54px;
-  margin: 22px 0 0;
-  padding: 0 17px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-
 /* ===== SIMPLE LOGIN ===== */
 
 #login.login-panel {
@@ -683,98 +565,116 @@ button:active {
   border-color: rgba(96,165,250,.2);
 }
 
-/* ADMIN PANEL */
+/* ===== CLEAN ADMIN PANEL ===== */
 
 #adminPage {
   display: none;
   width: 100%;
-  max-width: 900px;
+  max-width: 850px;
   margin: auto;
-  padding: 20px 15px 50px;
+  padding: 20px 14px 40px;
 }
 
 #adminPage .card {
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(59,130,246,.12),
-      transparent 50%
-    ),
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.085),
-      rgba(255,255,255,.025)
-    );
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 22px;
-  padding: 21px;
-  margin-bottom: 17px;
+  background: #111827;
+  border: 1px solid #253248;
+  border-radius: 17px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.14);
 }
 
 #adminPage h2 {
-  font-size: 21px;
-  margin: 0;
-  letter-spacing: -.5px;
+  color: #f1f5f9;
+  font-size: 19px;
+  margin: 0 0 12px;
 }
 
 #adminPage h3 {
-  color: #e7f0ff;
-  font-size: 16px;
+  color: #e2e8f0;
+  font-size: 15px;
 }
 
 #adminPage h4 {
-  color: #a9c8f5;
+  color: #bfdbfe;
   font-size: 13px;
 }
 
 #adminPage p {
-  color: #a0aec3;
+  color: #94a3b8;
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 #adminPage input,
 #adminPage textarea {
-  background: rgba(3,8,18,.45);
-  border-color: rgba(255,255,255,.1);
+  background: #0b1220;
+  color: #f1f5f9;
+  border: 1px solid #29364b;
+  border-radius: 11px;
 }
 
 #adminPage button {
-  border-radius: 13px;
+  border-radius: 11px;
+}
+
+#adminPage .primary {
+  background: #347ff0;
+  color: white;
+  border: 1px solid #347ff0;
+}
+
+#adminPage .secondary {
+  background: #1b2638;
+  color: #dbeafe;
+  border: 1px solid #2c3b52;
+}
+
+#adminPage .danger {
+  background: #2b171d;
+  color: #fda4af;
+  border: 1px solid #5a2935;
 }
 
 #adminPage hr {
-  border: 0;
+  border: none;
   height: 1px;
-  background: rgba(255,255,255,.1);
-  margin: 20px 0;
+  background: #253248;
+  margin: 18px 0;
 }
 
-#adminCountPreview,
-#reductionCount {
-  padding: 11px 13px;
-  border-radius: 12px;
-  background: rgba(96,165,250,.08);
-  border: 1px solid rgba(96,165,250,.14);
-  color: #9fcaff;
-  font-size: 12px;
-  margin: 10px 0 15px;
+#adminPage #adminCountPreview,
+#adminPage #reductionCount {
+  background: #142238;
+  border: 1px solid #263d5b;
+  border-radius: 10px;
+  color: #93c5fd;
+  padding: 12px;
 }
 
-#adminList .card {
-  background: rgba(255,255,255,.045);
-  border: 1px solid rgba(255,255,255,.1);
-  padding: 17px;
-  border-radius: 18px;
+#adminPage #adminList .card {
+  background: #0d1523;
+  border-radius: 14px;
+  padding: 15px;
+  box-shadow: none;
 }
 
-#adminList h3 {
+#adminPage #rejectedList,
+#adminPage #reductionHistory {
   overflow-wrap: anywhere;
+  color: #cbd5e1;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
-#adminList button {
-  width: 100%;
+#adminPage #rejectedList p,
+#adminPage #reductionHistory p {
+  background: #0d1523;
+  border: 1px solid #202e43;
+  padding: 11px;
+  border-radius: 10px;
 }
+
 
 /* ADMIN DATA AREAS */
 
