@@ -957,11 +957,15 @@ button:active {
 
   </div>    <input id="generateAmount" type="hidden">  
   <div id="customStatus" class="description" style="margin-top:12px"></div>  
-</div>  </div>  
-<div class="card merge-card"><h2 class="section-title">✦ Gabungkan semua teks email yang ada di catatanmu!</h2><p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p>
+</div>
+<div class="card merge-card"><h2 class="section-title">✦ Gabungkan semua teks email yang ada di catatanmu!</h2>
+   <p class="description">Mengambil alamat email yang tersimpan di catatan dan menampilkan daftar unik.</p>
    <button class="primary full" onclick="mergeAllGmail()">✦ Gabungkan semua teks email yang ada di catatanmu!</button>
-   <div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div><textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea>
-      <button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button><button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button><button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>  
+   <div id="mergeResult" style="display:none;margin-top:15px"><div id="mergeCount" class="description"></div>
+      <textarea id="mergedEmails" readonly placeholder="Hasil gabungan muncul di sini..." style="min-height:220px"></textarea>
+      <button class="primary full" onclick="copyMergedEmails()">📋 Salin Daftar</button>
+      <button class="secondary full" onclick="saveMergedNote()">💾 Simpan sebagai Catatan Baru</button>
+      <button class="danger full" onclick="clearMergedEmails()">🗑️ Hapus Hasil Gabungan</button></div></div>  
 <p class="description" style="margin-left:5px">Semua catatan pribadimu.</p><div id="notes"></div>
    <button class="danger full" onclick="deleteAllNotes()">🗑️ Hapus Semua Catatan</button>
    <button class="danger full" onclick="logout()">Keluar dari Akun</button>  
