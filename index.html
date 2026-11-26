@@ -849,6 +849,21 @@ button:active {
   opacity: 0.65 !important;
   margin-top: 6px !important;
    }
+   .simulation-items {
+  background: #171326;
+  padding: 10px 16px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.simulation-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #393044;
+}
+
+.simulation-item:last-child {
+  border-bottom: none;
+}
 </style>
 </head>
 <body>
@@ -1883,11 +1898,12 @@ function renderSimulationData() {
   container.innerHTML = records.map(r => `
     <div class="card">
       <h3>${escapeSimulationHTML(r.name)}</h3>
+
       <p>Jumlah data: ${r.total}</p>
 
-      <div style="background:#171326;padding:10px;border-radius:10px;margin-top:10px">
+      <div class="simulation-items">
         ${r.items.map((item, index) => `
-          <div style="padding:5px 0;border-bottom:1px solid #393044">
+          <div class="simulation-item">
             ${index + 1}. ${escapeSimulationHTML(item)}
           </div>
         `).join("")}
