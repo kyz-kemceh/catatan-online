@@ -1012,6 +1012,8 @@ function openAdminPage(){
     return;
   }
 
+  sessionStorage.setItem("lastPage", "admin");
+
   document.querySelector("header").style.display = "none";
   document.getElementById("app").style.display = "none";
   document.getElementById("adminPage").style.display = "block";
@@ -1036,23 +1038,63 @@ async function checkUser(){
   await initAdminButton();
 }
 function showPage(){
-document.getElementById("status").style.display=currentUser||recoveryMode?"none":"block";
-document.getElementById("status").textContent="Silakan login.";
-document.getElementById("login").style.display=currentUser||recoveryMode?"none":"block";
-document.getElementById("signupBox").style.display="none";
-document.getElementById("resetBox").style.display=recoveryMode?"block":"none";
-document.getElementById("app").style.display=currentUser&&!recoveryMode?"block":"none";
-document.querySelector("header").style.display =
-  currentUser && !recoveryMode ? "flex" : "none";
+
+  const isLoggedIn = currentUser && !recoveryMode;
+
+  document.getElementById("status").style.display =
+    currentUser || recoveryMode ? "none" : "block";
+
+  document.getElementById("status").textContent =
+    "Silakan login.";
+
+  document.getElementById("login").style.display =
+    currentUser || recoveryMode ? "none" : "block";
+
+  document.getElementById("signupBox").style.display = "none";
+
+  document.getElementById("resetBox").style.display =
+    recoveryMode ? "block" : "none";
+
+  document.getElementById("app").style.display =
+    isLoggedIn ? "block" : "none";
+
+  document.querySelector("header").style.display =
+    isLoggedIn ? "flex" : "none";
+
   const adminButton = document.getElementById("adminButtonBox");
 
-if(adminButton){
-  adminButton.style.display =
-    currentUser && !recoveryMode && isAdminEmail(currentUser.email)
-      ? "inline-block"
-      : "none";
-}
-if(currentUser&&!recoveryMode)loadNotes();
+  if(adminButton){
+    adminButton.style.display =
+      isLoggedIn && isAdminEmail(currentUser.email)
+        ? "inline-block"
+        : "none";
+  }
+
+  const adminPage = document.getElementById("adminPage");
+
+  if(adminPage){
+    adminPage.style.display = "none";
+  }
+
+  if(isLoggedIn){
+
+    if(sessionStorage.getItem("lastPage") === "admin"
+       && isAdminEmail(currentUser.email)){
+
+      document.getElementById("app").style.display = "none";
+      document.querySelector("header").style.display = "none";
+
+      if(adminPage){
+        adminPage.style.display = "block";
+      }
+
+      renderSimulationData();
+      updateSimulationCount();
+
+    }else{
+      loadNotes();
+    }
+  }
 }
 function showSignup(){document.getElementById("login").style.display="none";document.getElementById("signupBox").style.display="block";}
 function showLogin(){document.getElementById("signupBox").style.display="none";document.getElementById("login").style.display="block";}
