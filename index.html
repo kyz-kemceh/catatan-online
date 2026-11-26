@@ -1941,15 +1941,43 @@ function deleteSimulationData(id) {
     return;
   }
 
-  container.innerHTML = data.map((r, i) => `
+  // Kelompokkan berdasarkan penyetor dan waktu pengurangan
+  const groups = {};
+
+  data.forEach(r => {
+    const key = (r.owner || "-") + "|" + (r.date || "-");
+
+    if (!groups[key]) {
+      groups[key] = {
+        owner: r.owner || "-",
+        date: r.date || "-",
+        items: []
+      };
+    }
+
+    groups[key].items.push(r.item);
+  });
+
+  container.innerHTML = Object.values(groups).map(group => `
     <div class="card">
-      <p><b>${i + 1}.</b> ${escapeSimulationHTML(r.item || "")}</p>
-      <small>Nama: ${escapeSimulationHTML(r.owner || "-")}</small>
-      <small>Waktu: ${escapeSimulationHTML(r.date || "-")}</small>
+      <h3>${escapeSimulationHTML(group.owner)}</h3>
+
+      <p>Jumlah data ditolak: ${group.items.length}</p>
+
+      <div class="simulation-items">
+        ${group.items.map((item, index) => `
+          <div class="simulation-item">
+            ${index + 1}. ${escapeSimulationHTML(item || "")}
+          </div>
+        `).join("")}
+      </div>
+
+      <small class="rejected-date">
+        Waktu: ${escapeSimulationHTML(group.date)}
+      </small>
     </div>
   `).join("");
-}
-
+  }
 
 function renderReductionHistory() {
   const container = document.getElementById("reductionHistory");
